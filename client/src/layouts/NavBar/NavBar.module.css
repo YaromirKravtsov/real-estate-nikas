@@ -1,0 +1,36 @@
+.navBar {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+
+   padding-left:60px ;
+    row-gap: 25px;
+}
+
+.navLink {
+    display: flex;
+    flex-direction: row;
+    column-gap: 25px;
+    align-items: center;
+}
+.navLink:hover p {
+    color: #E53012;
+}
+.navLink p {
+    font-family: "PT Sans", sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+     color: #931B17;
+}
+.active p {
+    color: #E53012;
+}
+
+.navLink p {}
+
+.navLink img {
+    width: 40px;
+    height: auto;
+}

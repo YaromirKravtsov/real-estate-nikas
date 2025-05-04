@@ -1,0 +1,39 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 60px;
+    padding-top: 0;
+}
+
+.top {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.topButton {
+    width: 260px;
+    height: 55px;
+    border-radius: 30px;
+    max-height: 540px;
+    overflow-y: auto;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/*  */
+.goBack{
+    background: #E7E7E7;
+    color: #8C8C8C;
+}
+.buttonRow{
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+}
