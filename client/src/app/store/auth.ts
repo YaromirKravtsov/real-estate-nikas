@@ -22,7 +22,7 @@ interface BearState {
   checkAuth: () => Promise<void>;
   logout: () => void;
   authError: boolean;
-  
+
 }
 
 export const useAuthStore = create<BearState>((set) => ({
@@ -58,9 +58,9 @@ export const useAuthStore = create<BearState>((set) => ({
       localStorage.setItem('token', data.accessToken);
     } catch (error: any) {
       console.error(error);
-      set({ isLoading: false ,authError: true });
-      throw new Error(error) 
- 
+      set({ isLoading: false, authError: true });
+      throw new Error(error)
+
     }
   },
   checkAuth: async () => {
@@ -78,17 +78,16 @@ export const useAuthStore = create<BearState>((set) => ({
         authError: false,
         firstName: decodedToken.firstName,
         lastName: decodedToken.lastName,
-        
         avatarLink: decodedToken.avatarLink,
       });
     } catch (error: any) {
       console.error(error.response?.data?.message);
-      set({ isLoading: false, loggedIn: false });  
+      set({ isLoading: false, loggedIn: false });
     }
   },
 
   logout: () => {
-    set({ loggedIn: false, role: '', isLoading: false, userId: 0});
+    set({ loggedIn: false, role: '', isLoading: false, userId: 0 });
     localStorage.removeItem('token');
     $api.post('/logout', {}, { withCredentials: true })
       .then(() => {
@@ -98,5 +97,4 @@ export const useAuthStore = create<BearState>((set) => ({
         console.error('Logout error', error);
       });
   },
-
 }));

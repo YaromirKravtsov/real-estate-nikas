@@ -17,7 +17,7 @@ import { File } from 'multer';
 export class UserController {
     constructor(private userService: UserService) { }
 
-    @Roles(['admin', 'trainer'])
+    @Roles(['admin', 'user'])
     @UseGuards(RoleGuard)
     @ApiBearerAuth()
     @Get(':id')
@@ -34,11 +34,11 @@ export class UserController {
     @Post('/')
     @ApiOperation({ summary: 'Create a new user' })
     @UseInterceptors(FileInterceptor('avatar'))
-    @ApiConsumes('multipart/form-data')  // Налаштовуємо Swagger на прийом файлів
+    @ApiConsumes('multipart/form-data')  
     @ApiBody({
         description: 'Create a new user with an avatar',
         type: RegisterUserDto,
-        required: true, // Вказуємо, що тіло обов’язкове
+        required: true,
     })
     async createUser(
         @Body() dto: RegisterUserDto,
@@ -89,24 +89,7 @@ export class UserController {
     @ApiBody({ type: LoginDto })
     async login(@Body() dto: LoginDto, @Res() res: Response) {
         const userData = await this.userService.login(dto);
-        res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 68 * 1000, httpOnly: true });
-        res.cookie('deviceId', userData.deviceId, { maxAge: 30 * 24 * 60 * 68 * 1000, httpOnly: true });
         return res.status(200).json(userData);
     }
 
-
-
-    /*  @Put(':id/password')
-     @ApiOperation({ summary: 'Change user password' })
-     @ApiBody({ type: ChangePasswordDto })
-     async changePassword(@Body() dto: ChangePasswordDto, @Req() req: Request) {
-         const refreshToken = req.cookies['refreshToken']; // Достаем куку
-         const data = verify(refreshToken, process.env.JWT_REFRESH_SECRET) as JwtPayload;
-         if ((data.userId === dto.userId) || data.role === 'admin') {
-             const userData = await this.userService.changePassword(dto);
-             return { message: 'Password changed successfully' };
-         } else {
-             throw new ForbiddenException('Permission denied');
-         }
-     } */
 }

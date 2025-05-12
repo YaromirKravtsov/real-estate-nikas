@@ -1,6 +1,6 @@
 
 import {Model, Column, DataType, Table, HasMany, BelongsToMany } from "sequelize-typescript";
-import { Token } from "src/token/token.model";
+
 
 
 interface UserCreationAttrs{
@@ -38,7 +38,5 @@ export class User extends Model<User,UserCreationAttrs>{
 
     @Column({type:DataType.STRING, allowNull:true, field: 'avatarLing'})
     avatarLink:string;
-        
-    @HasMany(()=> Token)
-    tokens: Token[];
+
 }

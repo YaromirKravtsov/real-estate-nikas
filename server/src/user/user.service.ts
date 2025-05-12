@@ -12,8 +12,6 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register-user-dto';
 import { hash, compare } from 'bcrypt';
 import { PayloadDto } from 'src/token/dto/payload.dto';
-import { TokenService } from 'src/token/token.service';
-import { SaveTokenDto } from 'src/token/dto/save-token.dto';
 import { EditUserDto } from './dto/edit-user.dto';
 import { Op } from 'sequelize';
 import * as bcrypt from 'bcrypt';
@@ -21,6 +19,7 @@ import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from './dto/chage-password.dto';
 import { FilesService } from 'src/files/files.service';
 import { MyLogger } from 'src/logger/logger.service';
+import { TokenService } from 'src/token/token.service';
 
 @Injectable()
 export class UserService {
@@ -32,8 +31,8 @@ export class UserService {
     private logger: MyLogger
   ) { }
 
-  async createUser(dto: RegisterUserDto,avatar:File) {
-    this.logger.log('Start create new user', {...dto,avatar});
+  async createUser(dto: RegisterUserDto, avatar: File) {
+    this.logger.log('Start create new user', { ...dto, avatar });
     try {
       const candidate = await this.userRepository.findOne({
         where: { firstName: dto.firstName },
@@ -46,7 +45,7 @@ export class UserService {
         );
       }
 
-      let fileIUrl ;
+      let fileIUrl;
       if (avatar) {
         fileIUrl = await this.filesService.createFile(avatar);
       }
@@ -79,12 +78,12 @@ export class UserService {
           HttpStatus.NOT_FOUND,
         );
       }
-      
-      if(avatar){
+
+      if (avatar) {
         await this.filesService.deleteFile(user.avatarLink);
         const fileName = await this.filesService.createFile(avatar);
-        await user.update({...dto,avatarLink: fileName});
-      }else await user.update(dto);
+        await user.update({ ...dto, avatarLink: fileName });
+      } else await user.update(dto);
 
 
       return user;
@@ -109,7 +108,7 @@ export class UserService {
       }
 
 
-      await this.tokenService.removeAllTokensForUser(id);
+
       await player.destroy();
       return;
     } catch (error) {
@@ -141,7 +140,7 @@ export class UserService {
     try {
       let whereConditions: any = {};
 
-      
+
       if (searchQuery && searchQuery.trim() !== '') {
         whereConditions[Op.or] = [
           { username: { [Op.like]: `%${searchQuery}%` } },
@@ -189,20 +188,14 @@ export class UserService {
       const payload: PayloadDto = {
         userId: user.id,
         role: user.role,
-        avatarLink: process.env.STATIC_URL +  user.avatarLink,
+        avatarLink: process.env.STATIC_URL + user.avatarLink,
         firstName: user.firstName,
         lastName: user.lastName,
       };
 
-      const tokens = this.tokenService.generateTokens(payload);
-      const tokenDto: SaveTokenDto = {
-        userId: user.id,
-        refreshToken: tokens.refreshToken,
-      };
-      const deviceId = this.tokenService.generateDeviceId();
-      await this.tokenService.saveToken({ ...tokenDto, deviceId });
+      const token = this.tokenService.generateToken(payload);
 
-      return { ...tokens, deviceId };
+      return { accessToken: token };
     } catch (error) {
       console.log(error);
       throw new HttpException(
