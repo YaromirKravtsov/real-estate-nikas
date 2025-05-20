@@ -3,5 +3,5 @@ export class PayloadDto{
     readonly role: string; 
     readonly firstName: string;
     readonly lastName: string;
-    readonly avatarLink: string;
+    readonly profileImageUrl: string;
 }

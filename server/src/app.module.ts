@@ -1,26 +1,39 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import { TokenModule } from './token/token.module';
-import { Token } from './token/token.model';
-import { User } from './user/user.model';
-import { UserModule } from './user/user.module';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MulterModule } from '@nestjs/platform-express';
 import { join } from 'path';
 
+// Feature modules
+import { TokenModule } from './token/token.module';
+import { UserModule } from './user/user.module';
+import { PropertyModule } from './propertie/property.module';
+
+// Sequelize models
+import { User } from './user/user.model';
+import { Property } from './propertie/property.model';
+import { PropertyImage } from './propertie/property_images.model';
+
 @Module({
   imports: [
+    // File upload handling
     MulterModule.register({
-      dest: './uploads', // Папка для сохранения файлов
+      dest: './uploads',
     }),
+
+    // Environment variables loader
     ConfigModule.forRoot({
-      envFilePath:`.${process.env.NODE_ENV}.env`
+      envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
+
+    // Static file serving (e.g. uploaded images)
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'static'), // Путь к папке для статики
-      serveRoot: '/static', // URL-эндпоинт для доступа к файлам
-  }),
+      rootPath: join(process.cwd(), 'static'),
+      serveRoot: '/static',
+    }),
+
+    // Sequelize database connection
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: process.env.MYSQL_HOST,
@@ -28,11 +41,14 @@ import { join } from 'path';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
-      models: [User, Token],
-      autoLoadModels: process.env.AUTO_LOAD_MODELS == 'true'
+      models: [User, Property, PropertyImage],
+      autoLoadModels: process.env.AUTO_LOAD_MODELS === 'true',
     }),
+
+    // Application modules
     TokenModule,
-    UserModule
+    UserModule,
+    PropertyModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

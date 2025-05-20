@@ -8,12 +8,8 @@ export class TokenController {
     @Get('refresh')
     async refresh(@Req() req: Request, @Res() res: Response) {
         try {
-            const { refreshToken, deviceId } = req.cookies;
-            console.log("refreshToken, deviceIdrefreshToken, deviceIdrefreshToken, deviceIdrefreshToken, deviceIdrefreshToken, deviceId")
-            console.log(refreshToken, deviceId)
-            const userData = await this.tokenService.refresh(refreshToken, deviceId);
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 68 * 1000, httpOnly: true });
-            res.cookie('deviceId', userData.deviceId, { maxAge: 30 * 24 * 60 * 68 * 1000, httpOnly: true });
+            const { accessToken } = req.cookies;
+            const userData = await this.tokenService.refresh(accessToken);
             return res.json(userData);
         } catch (error) {
             console.log(error)

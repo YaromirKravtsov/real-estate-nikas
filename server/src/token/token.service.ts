@@ -43,30 +43,47 @@ export class TokenService {
         }
     }
 
-    async refresh(refreshToken, deviceId) {
-        console.log(refreshToken, deviceId)
-        if (!refreshToken) {
-            throw new UnauthorizedException(HttpStatus.BAD_REQUEST);
-        }
-        const userData = this.validateRefreshToken(refreshToken);
+    async refresh(accessToken: string) {
+  console.log('[REFRESH] Access Token:', accessToken);
 
-        if (!userData) {
-            throw new UnauthorizedException(HttpStatus.BAD_REQUEST);
-        }
+  if (!accessToken) {
+    console.error('[REFRESH] No access token provided');
+    throw new UnauthorizedException(HttpStatus.BAD_REQUEST);
+  }
 
-        const user = await this.userService.findByPk(userData.userId);
+  const userData = this.validateAccessToken(accessToken);
+  console.log('[REFRESH] Decoded user data:', userData);
 
-        const payload: PayloadDto = {
-            userId: user.id,
-            role: user.role,
-            avatarLink: process.env.STATIC_URL + user.avatarLink,
-            firstName: user.firstName,
-            lastName: user.lastName,
-        }
-        const token = this.generateToken(payload);
+  if (!userData) {
+    console.error('[REFRESH] Invalid token');
+    throw new UnauthorizedException(HttpStatus.BAD_REQUEST);
+  }
 
-        return token;
-    }
+  const user = await this.userService.findByPk(userData.userId);
+
+  if (!user) {
+    console.error(`[REFRESH] No user found with ID: ${userData.userId}`);
+    throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);
+  }
+
+  const payload: PayloadDto = {
+    userId: user.id,
+    role: user.role,
+    profileImageUrl: user.profileImageUrl
+      ? process.env.STATIC_URL + user.profileImageUrl
+      : null,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  };
+
+  console.log('[REFRESH] New token payload:', payload);
+
+  const token = this.generateToken(payload);
+
+  console.log('[REFRESH] Token successfully generated');
+  return token;
+}
+
 
     generateDeviceId(): string {
         return crypto.randomBytes(Math.ceil(20 / 2))

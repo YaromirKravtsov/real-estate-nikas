@@ -8,18 +8,12 @@ export class FilesService {
     
     async createFile(file): Promise<string> {
         try {
-            // Укажите путь к папке, находящейся вне dist
             const fileName = uuid.v4() + path.extname(file.originalname);
-            const filePath = path.resolve(process.cwd(), 'static'); // process.cwd() указывает на корень проекта
-            
+            const filePath = path.resolve(process.cwd(), 'static'); 
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
             }
-
             await fs.promises.writeFile(path.join(filePath, fileName), file.buffer);
-            
-            // Возвращаем относительный путь для использования в URL
-      
             return fileName;
         } catch (e) {
             console.log(e);

@@ -24,7 +24,7 @@ interface BearState {
   authError: boolean;
 
 }
-
+// ERROR After reload page as loged user auto log out !!!
 export const useAuthStore = create<BearState>((set) => ({
   firstName: '',
   lastName: '',

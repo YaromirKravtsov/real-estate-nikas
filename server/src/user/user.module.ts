@@ -11,8 +11,8 @@ import { LoggerModule } from 'src/logger/logger.module';
 @Module({
   controllers: [UserController],
   providers: [UserService],
-  imports: [SequelizeModule.forFeature([User]),forwardRef(() =>TokenModule), FilesModule,LoggerModule],
+  imports: [SequelizeModule.forFeature([User]), forwardRef(() => TokenModule), FilesModule, LoggerModule],
   exports: [UserService]
-  
+
 })
-export class UserModule {}
+export class UserModule { }

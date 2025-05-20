@@ -7,7 +7,7 @@ export interface AuthResponse {
 export default class AppService {
     static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
         console.log(email,password)
-        return $api.post('/user/login', {
+        return $api.post('/users/login', {
             email,
             password
         })
