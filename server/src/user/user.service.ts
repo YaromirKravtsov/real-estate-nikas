@@ -8,6 +8,7 @@ import { TokenService } from 'src/token/token.service';
 import { PayloadDto } from 'src/token/dto/payload.dto';
 import { hash, compare } from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -35,9 +36,21 @@ export class UserService {
     }
   }
 
-  async getAllUsers(): Promise<any> {
-    const users = await this.userRepository.findAll();
-    return users.map(user => this.buildUserWithFullImageUrl(user));
+  async getAllUsers(searchQuery?: string) {
+    let where = {};
+
+    if (searchQuery) {
+      where = {
+        [Op.or]: [
+          { firstName: { [Op.like]: `%${searchQuery}%` } },
+          { lastName: { [Op.like]: `%${searchQuery}%` } },
+          { email: { [Op.like]: `%${searchQuery}%` } },
+          { phoneNumber: { [Op.like]: `%${searchQuery}%` } },
+        ],
+      };
+    }
+
+    return await this.userRepository.findAll({ where });
   }
 
   async createUser(dto: CreateUserDto, image?: File): Promise<any> {
@@ -91,7 +104,7 @@ export class UserService {
         where: { email: dto.email },
       });
       if (!user) {
-        console.log( new HttpException(
+        console.log(new HttpException(
           `Ім'я користувача або пароль недійсні`,
           HttpStatus.BAD_REQUEST,
         ))
@@ -119,7 +132,7 @@ export class UserService {
       const accessToken = this.tokenService.generateToken(payload);
 
 
-      return {accessToken};
+      return { accessToken };
     } catch (error) {
       console.log(error);
       throw new HttpException(

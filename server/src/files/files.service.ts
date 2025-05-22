@@ -21,7 +21,6 @@ export class FilesService {
         }
 
     }
-    //return process.env.STATIC_URL + fileName;
     async deleteFile(fileName: string): Promise<void> {
         try {
             const filePath = path.resolve(__dirname, '..', 'static', fileName);

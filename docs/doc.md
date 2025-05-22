@@ -128,7 +128,6 @@ MYSQL_DB=real_estate_uni
 JWT_ACCESS_SECRET=123
 JWT_REFRESH_SECRET=321
 JWT_SECRET=321
-FRONT_URL=http://localhost:3000/
 STATIC_URL=http://localhost:5000/
 ```
 

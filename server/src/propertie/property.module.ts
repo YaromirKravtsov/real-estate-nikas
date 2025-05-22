@@ -10,6 +10,7 @@ import { FilesModule } from 'src/files/files.module';
 @Module({
   providers: [PropertyService],
   controllers: [PropertyController],
-  imports: [SequelizeModule.forFeature([User, Property, PropertyImage]), FilesModule]
+  imports: [SequelizeModule.forFeature([User, Property, PropertyImage]), FilesModule],
+  exports: [PropertyService]
 })
 export class PropertyModule {}

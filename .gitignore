@@ -35,7 +35,7 @@ lerna-debug.log*
 /server/.env.test.local
 /server/.env.production.local
 /server/.production.env
-
+/server/static
 # === IDEs & Editors ===
 .idea/
 .vscode/*

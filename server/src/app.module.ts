@@ -14,6 +14,8 @@ import { PropertyModule } from './propertie/property.module';
 import { User } from './user/user.model';
 import { Property } from './propertie/property.model';
 import { PropertyImage } from './propertie/property_images.model';
+import { PropertyViewRequestsModule } from './property_request/property_request.module';
+import { PropertyRequest } from './property_request/property_request.model';
 
 @Module({
   imports: [
@@ -41,7 +43,7 @@ import { PropertyImage } from './propertie/property_images.model';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
-      models: [User, Property, PropertyImage],
+      models: [User, Property, PropertyImage, PropertyRequest],
       autoLoadModels: process.env.AUTO_LOAD_MODELS === 'true',
     }),
 
@@ -49,6 +51,7 @@ import { PropertyImage } from './propertie/property_images.model';
     TokenModule,
     UserModule,
     PropertyModule,
+    PropertyViewRequestsModule,
   ],
 })
 export class AppModule {}

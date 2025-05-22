@@ -11,8 +11,9 @@ import {
   UploadedFile,
   UseInterceptors,
   Res,
+  Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Roles } from 'src/role/roles-auth-decorator';
 import { RoleGuard } from 'src/role/role.gurard';
@@ -32,7 +33,7 @@ export class UserController {
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Get(':id')
-  @ApiOperation({ summary: 'Get one user by ID' })
+  @ApiOperation({ summary: 'Get one user by ID. For pages: Співробітник v2' })
   @ApiParam({ name: 'id' })
   async getUser(@Param('id') id: string) {
     return await this.userService.getUser(Number(id));
@@ -42,10 +43,12 @@ export class UserController {
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
-  async getAllUsers() {
-    return await this.userService.getAllUsers();
+  @ApiOperation({ summary: 'Search users. For pages: Співробітники List v2' })
+  @ApiQuery({ required: false, name: 'searchQuery' })
+  async getAllUsers(@Query('searchQuery') searchQuery?: string) {
+    return await this.userService.getAllUsers(searchQuery);
   }
+
 
   @Roles(['admin'])
   @UseGuards(RoleGuard)
@@ -53,7 +56,12 @@ export class UserController {
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
-  @ApiOperation({ summary: 'Create new user' })
+  @ApiOperation({ summary: 'Create new user. For pages: Співробітник v2' })
+  @ApiBody({
+    description: 'Create a new user with an avatar',
+    type: RegisterUserDto,
+    required: true,
+  })
   async createUser(@Body() dto: CreateUserDto, @UploadedFile() image: File) {
     return await this.userService.createUser(dto, image);
   }
@@ -62,7 +70,7 @@ export class UserController {
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Put(':id')
-  @ApiOperation({ summary: 'Update user by ID' })
+  @ApiOperation({ summary: 'Update user by ID. For pages: Співробітник v2' })
   @ApiParam({ name: 'id' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
@@ -95,19 +103,10 @@ export class UserController {
 
   /* --- */
 
-
   @Post('/admin')
   @ApiOperation({ summary: 'Create a new user' })
-  @UseInterceptors(FileInterceptor('avatar'))
-  @ApiConsumes('multipart/form-data')  // Налаштовуємо Swagger на прийом файлів
-  @ApiBody({
-    description: 'Create a new user with an avatar',
-    type: RegisterUserDto,
-    required: true, // Вказуємо, що тіло обов’язкове
-  })
+
   async createAdmin(
-    @Body() dto: RegisterUserDto,
-    @UploadedFile() avatar: File
   ) {
     return await this.userService.createAdmin();
   }
