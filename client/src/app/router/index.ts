@@ -1,28 +1,35 @@
-import React from 'react';
-import LoginPage from '../../pages/LoginPage/LoginPage';
-import MainPage from '../../pages/MainPage/MainPage';
-import AdminPage from '../../pages/AdminPage/AdminPage';
+import React from "react";
+import LoginPage from "../../pages/LoginPage/LoginPage";
+import MainPage from "../../pages/MainPage/MainPage";
+import AdminPage from "../../pages/AdminPage/AdminPage";
+import NewAnnouncementPage from "../../pages/NewAnnouncementPage/NewAnnouncementPage";
+import DetailAnnouncementPage from "../../pages/DetailAnnouncementPage/DetailAnnouncementPage";
 
 export interface IRoute {
   path: string;
   element: React.ComponentType;
-
 }
 export enum RouteNames {
   LOGIN = "/login",
   MAIN = "/",
+  NEW = "/NewAnnouncementPage",
+  DETAIL = "/DetailAnnouncementPage",
 }
 
-export const adminRoutes: IRoute[] = [{
-  path: RouteNames.MAIN, element: AdminPage
-},
-]
+export const adminRoutes: IRoute[] = [
+  {
+    path: RouteNames.MAIN,
+    element: AdminPage,
+  },
+];
 
 export const userRoutes: IRoute[] = [
   { path: RouteNames.MAIN, element: MainPage },
-]
+];
 
 export const publicRoutes: IRoute[] = [
   { path: RouteNames.LOGIN, element: LoginPage },
+  { path: RouteNames.NEW, element: NewAnnouncementPage },
   { path: RouteNames.MAIN, element: MainPage },
-]
+  { path: RouteNames.DETAIL, element: DetailAnnouncementPage },
+];
