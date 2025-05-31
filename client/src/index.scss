@@ -1,0 +1,25 @@
+.custom-button {
+  background-color: #ffac12; /* желаемый цвет */
+  color: #212529;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px; /* более округлые края */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  font-size: 1rem;
+}
+
+.custom-button:hover {
+  background-color: #e69c0f; /* темнее при наведении */
+}
+
+.custom-button:active {
+  background-color: #cc8a0d; /* ещё темнее при нажатии */
+}
+
+.custom-button:focus {
+  outline: 3px solid #ffe3aa;
+  outline-offset: 2px;
+}

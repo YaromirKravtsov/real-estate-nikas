@@ -4,6 +4,7 @@ import MainPage from "../../pages/MainPage/MainPage";
 import AdminPage from "../../pages/AdminPage/AdminPage";
 import NewAnnouncementPage from "../../pages/NewAnnouncementPage/NewAnnouncementPage";
 import DetailAnnouncementPage from "../../pages/DetailAnnouncementPage/DetailAnnouncementPage";
+import SubmittedApplicationsPage from "../../pages/SubmittedApplicationsPage/SubmittedApplicationsPage";
 
 export interface IRoute {
   path: string;
@@ -14,6 +15,7 @@ export enum RouteNames {
   MAIN = "/",
   NEW = "/NewAnnouncementPage",
   DETAIL = "/DetailAnnouncementPage",
+  APPLICATIONS = "/SubmittedApplicationsPage",
 }
 
 export const adminRoutes: IRoute[] = [
@@ -30,6 +32,7 @@ export const userRoutes: IRoute[] = [
 export const publicRoutes: IRoute[] = [
   { path: RouteNames.LOGIN, element: LoginPage },
   { path: RouteNames.NEW, element: NewAnnouncementPage },
+  { path: RouteNames.APPLICATIONS, element: SubmittedApplicationsPage },
   { path: RouteNames.MAIN, element: MainPage },
   { path: RouteNames.DETAIL, element: DetailAnnouncementPage },
 ];

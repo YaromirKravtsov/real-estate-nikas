@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./NewAnnouncementPage.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../../app/store/auth";
 import { RouteNames } from "../../app/router";
@@ -9,11 +9,13 @@ const NewAnnouncementPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const role = useAuthStore((store) => store.role);
+
   useEffect(() => {
-    if (role == "admin" || role == "user") {
+    if (role === "admin" || role === "user") {
       navigate(RouteNames.NEW);
     }
   }, [role]);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const newImages = files.map((file) => URL.createObjectURL(file));
@@ -25,30 +27,63 @@ const NewAnnouncementPage = () => {
   };
 
   return (
-    <div className="main-page">
-      <h1 className="page-title">Нове оголошення</h1>
+    <div
+      className="min-vh-100 bg-light p-4"
+      style={{ fontFamily: "Arial, sans-serif" }}
+    >
+      <h1 className="display-4 fw-bold mb-3">Нове оголошення</h1>
 
-      <div className="form-container">
-        {/* Форма */}
-        <div className="form-fields">
-          <input type="text" placeholder="Ім’я власника" />
-          <input type="text" placeholder="Номер власника" />
-          <input type="email" placeholder="Email" />
-          <input type="text" placeholder="Назва" />
-          <input type="number" placeholder="Ціна покупки" />
-          <input type="number" placeholder="Ціна оренди" />
-          <input type="text" placeholder="Площа (м²)" />
-          <input type="text" placeholder="Адреса" />
-          <input type="number" placeholder="Кількість кімнат" />
+      <div className="d-flex flex-wrap gap-3">
+        <div className="flex-grow-2 d-flex flex-column gap-3">
+          <input
+            type="text"
+            className="form-control form-control-lg w-100"
+            placeholder="Ім’я власника"
+          />
+          <input
+            type="text"
+            className="form-control form-control-lg w-100"
+            placeholder="Номер власника"
+          />
+          <input
+            type="email"
+            className="form-control form-control-lg w-100"
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            className="form-control form-control-lg w-100"
+            placeholder="Назва"
+          />
+          <input
+            type="number"
+            className="form-control form-control-lg w-100"
+            placeholder="Ціна покупки"
+          />
+          <input
+            type="number"
+            className="form-control form-control-lg w-100"
+            placeholder="Ціна оренди"
+          />
+          <input
+            type="text"
+            className="form-control form-control-lg w-100"
+            placeholder="Площа (м²)"
+          />
+          <input
+            type="text"
+            className="form-control form-control-lg w-100"
+            placeholder="Адреса"
+          />
+          <input
+            type="number"
+            className="form-control form-control-lg w-100"
+            placeholder="Кількість кімнат"
+          />
         </div>
 
-        {/* Завантаження зображень */}
-        <div className="image-upload">
-          <button
-            type="button"
-            className="upload-button"
-            onClick={handleUploadClick}
-          >
+        <div className="flex-grow-1 d-flex flex-column gap-3">
+          <button className="custom-button" onClick={handleUploadClick}>
             Додати зображення
           </button>
           <input
@@ -59,28 +94,34 @@ const NewAnnouncementPage = () => {
             ref={fileInputRef}
             style={{ display: "none" }}
           />
-          <div className="image-preview">
+          <div className="row row-cols-2 g-2">
             {images.map((img, idx) => (
-              <img key={idx} src={img} alt={`перегляд-${idx}`} />
+              <div key={idx} className="col">
+                <img
+                  src={img}
+                  alt={`перегляд-${idx}`}
+                  className="img-fluid rounded border"
+                  style={{ height: 128, objectFit: "cover", width: "100%" }}
+                />
+              </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="description-section">
-        <label htmlFor="description" className="description-label">
+      <div className="mt-5 d-flex flex-column gap-3 w-100">
+        <label htmlFor="description" className="h5 fw-semibold">
           Опис
         </label>
         <textarea
           id="description"
-          className="description-textarea"
+          className="form-control"
           rows={6}
           placeholder="Опис "
+          style={{ padding: "1rem" }}
         ></textarea>
-        <div className="button-wrapper">
-          <button className="upload-button create-request-button">
-            Створити заявку
-          </button>
+        <div className="d-flex justify-content-end">
+          <button className="custom-button">Створити заявку</button>
         </div>
       </div>
     </div>
