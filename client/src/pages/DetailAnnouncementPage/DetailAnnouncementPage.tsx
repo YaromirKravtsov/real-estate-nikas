@@ -1,7 +1,6 @@
-import "./DetailAnnouncementPage.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const DetailAnnouncementPage = () => {
-  // Пример данных
   const announcementData = {
     ownerName: "Іван Іванов",
     ownerPhone: "+380123456789",
@@ -21,12 +20,16 @@ const DetailAnnouncementPage = () => {
 Ціна: 58 000 $ (можливий торг)
 Контакт: Олександр, власник — +38 (067) 123-45-67`,
   };
-  return (
-    <div className="main-page">
-      <h1 className="page-title">Нове оголошення</h1>
 
-      <div className="form-container">
-        <div className="form-fields">
+  return (
+    <div className="container py-4">
+      <h1 className="display-4 fw-bold mb-3">Нове оголошення</h1>
+
+      <div className="d-flex flex-wrap gap-4">
+        <div
+          className="flex-grow-2 d-flex flex-column gap-3"
+          style={{ minWidth: 300 }}
+        >
           <div>
             <strong>Ім’я власника:</strong> {announcementData.ownerName}
           </div>
@@ -40,10 +43,12 @@ const DetailAnnouncementPage = () => {
             <strong>Назва:</strong> {announcementData.title}
           </div>
           <div>
-            <strong>Ціна покупки:</strong> {announcementData.purchasePrice} грн
+            <strong>Ціна покупки:</strong>{" "}
+            {announcementData.purchasePrice.toLocaleString()} грн
           </div>
           <div>
-            <strong>Ціна оренди:</strong> {announcementData.rentPrice} грн/міс
+            <strong>Ціна оренди:</strong>{" "}
+            {announcementData.rentPrice.toLocaleString()} грн/міс
           </div>
           <div>
             <strong>Площа:</strong> {announcementData.area}
@@ -57,16 +62,17 @@ const DetailAnnouncementPage = () => {
         </div>
       </div>
 
-      <div className="description-section">
-        <label className="description-label">Опис</label>
-        <p className="description-textarea" style={{ whiteSpace: "pre-wrap" }}>
+      <div className="mt-5 w-100 d-flex flex-column gap-3">
+        <label className="fw-semibold fs-5">Опис</label>
+        <p
+          className="border rounded p-3 shadow-sm"
+          style={{ whiteSpace: "pre-wrap", minHeight: 150 }}
+        >
           {announcementData.description}
         </p>
-        <div className="button-wrapper">
-          <button className="upload-danger dan me-2">Відхилити</button>{" "}
-          <button className="upload-button create-request-button">
-            Опублікувати
-          </button>
+        <div className="d-flex justify-content-end gap-2">
+          <button className="custom-button red">Відхилити</button>
+          <button className="custom-button">Опублікувати</button>
         </div>
       </div>
     </div>
