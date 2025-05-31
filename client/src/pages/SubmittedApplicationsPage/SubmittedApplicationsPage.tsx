@@ -8,7 +8,7 @@ const RulerIcon = FaRuler as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const SubmittedApplicationsPage = () => {
   return (
     <div className="container py-4">
-      <h1 className="mb-4 text-start fw-semibold">Подані заявки</h1>
+      <h1 className="display-4 fw-bold mb-3">Подані заявки</h1>
       <div className="card shadow-lg rounded-4 p-4 mx-auto">
         <div className="row g-4 align-items-center">
           <div className="col-md">

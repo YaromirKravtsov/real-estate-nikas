@@ -27,10 +27,7 @@ const NewAnnouncementPage = () => {
   };
 
   return (
-    <div
-      className="min-vh-100 bg-light p-4"
-      style={{ fontFamily: "Arial, sans-serif" }}
-    >
+    <div className="container py-4">
       <h1 className="display-4 fw-bold mb-3">Нове оголошення</h1>
 
       <div className="d-flex flex-wrap gap-3">

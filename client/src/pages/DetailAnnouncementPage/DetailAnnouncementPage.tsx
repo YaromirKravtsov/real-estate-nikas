@@ -22,11 +22,8 @@ const DetailAnnouncementPage = () => {
   };
 
   return (
-    <div
-      className="min-vh-100 bg-light p-4"
-      style={{ fontFamily: "Arial, sans-serif" }}
-    >
-      <h1 className="mb-4 fw-bold fs-1">Нове оголошення</h1>
+    <div className="container py-4">
+      <h1 className="display-4 fw-bold mb-3">Нове оголошення</h1>
 
       <div className="d-flex flex-wrap gap-4">
         <div
@@ -74,7 +71,7 @@ const DetailAnnouncementPage = () => {
           {announcementData.description}
         </p>
         <div className="d-flex justify-content-end gap-2">
-          <button className="btn btn-danger">Відхилити</button>
+          <button className="custom-button red">Відхилити</button>
           <button className="custom-button">Опублікувати</button>
         </div>
       </div>
