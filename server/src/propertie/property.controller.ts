@@ -32,27 +32,35 @@ import { SearchPropertyDto } from './dto/search-property.dto';
 @ApiTags('Properties')
 @Controller('properties')
 export class PropertyController {
-  constructor(private readonly propertyService: PropertyService) { }
+  constructor(private readonly propertyService: PropertyService) {}
 
   @Roles(['admin', 'user'])
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Post()
-  @ApiOperation({ summary: 'Create new property with optional images. For pages: Оголошення Item v2, Create Property' })
+  @ApiOperation({
+    summary:
+      'Create new property with optional images. For pages: Оголошення Item v2, Create Property',
+  })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreatePropertyDto })
   @ApiResponse({ status: 201, description: 'Property successfully created' })
   @UseInterceptors(FilesInterceptor('images'))
   async create(
     @Body() dto: CreatePropertyDto,
-    @UploadedFiles() images: File[]
+    @UploadedFiles() images: File[],
   ) {
-    return await this.propertyService.create({...dto, is_submission: false}, images);
+    return await this.propertyService.create(
+      { ...dto, is_submission: false },
+      images,
+    );
   }
 
-
   @Get('search')
-  @ApiOperation({ summary: 'Search properties by filters. For pages: Home Page(with limit = 6), Property Page, Properties Page, Оголошення List v2' })
+  @ApiOperation({
+    summary:
+      'Search properties by filters. For pages: Home Page(with limit = 6), Property Page, Properties Page, Оголошення List v2',
+  })
   @ApiResponse({ status: 200, description: 'Filtered list of properties' })
   async search(@Query() query: SearchPropertyDto) {
     return await this.propertyService.search(query);
@@ -62,13 +70,18 @@ export class PropertyController {
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Get('user-submitted/:id')
-  @ApiOperation({ summary: 'Get properties submitted by users (not agents). For pages: Співробітник v2' })
-  @ApiResponse({ status: 200, description: 'List of user-submitted properties' })
+  @ApiOperation({
+    summary:
+      'Get properties submitted by users (not agents). For pages: Співробітник v2',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user-submitted properties',
+  })
   @ApiParam({ name: 'id', type: Number })
   async getUserSubmitted(@Param('id') id: number) {
     return await this.propertyService.getUserSubmitted(id);
   }
-
 
   @Get('by-id/:id')
   @ApiOperation({ summary: 'Get property by ID For pages: Оголошення Item v2' })
@@ -79,13 +92,21 @@ export class PropertyController {
     return await this.propertyService.getOne(id);
   }
 
-
+  @Get()
+  @ApiOperation({ summary: 'Get all properties for listing' })
+  @ApiResponse({ status: 200, description: 'List of all properties' })
+  async getAll() {
+    return await this.propertyService.getAll();
+  }
 
   @Roles(['admin'])
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
   @Put(':id')
-  @ApiOperation({ summary: 'Update property by ID with optional new images. For pages: Оголошення Item v2' })
+  @ApiOperation({
+    summary:
+      'Update property by ID with optional new images. For pages: Оголошення Item v2',
+  })
   @ApiConsumes('multipart/form-data')
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: CreatePropertyDto })
@@ -95,7 +116,7 @@ export class PropertyController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePropertyDto,
-    @UploadedFiles() images: File[]
+    @UploadedFiles() images: File[],
   ) {
     return await this.propertyService.update(id, dto, images);
   }

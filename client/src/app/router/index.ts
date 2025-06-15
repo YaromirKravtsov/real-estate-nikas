@@ -15,7 +15,7 @@ export enum RouteNames {
   LOGIN = "/login",
   MAIN = "/",
   NEW = "/NewAnnouncementPage",
-  DETAIL = "/DetailAnnouncementPage",
+  DETAIL = "/DetailAnnouncementPage/:id",
   APPLICATIONS = "/SubmittedApplicationsPage",
   PUBLICATION = "/PublicationManagementPage",
 }

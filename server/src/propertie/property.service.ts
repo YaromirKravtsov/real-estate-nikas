@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Property } from './property.model';
 import { PropertyImage } from './property_images.model';
@@ -12,16 +17,17 @@ import { Op } from 'sequelize';
 export class PropertyService {
   constructor(
     @InjectModel(Property) private readonly propertyRepo: typeof Property,
-    @InjectModel(PropertyImage) private readonly imageRepo: typeof PropertyImage,
-    private readonly filesService: FilesService
-  ) { }
+    @InjectModel(PropertyImage)
+    private readonly imageRepo: typeof PropertyImage,
+    private readonly filesService: FilesService,
+  ) {}
 
   async create(dto: CreatePropertyDto, images: File[]) {
     const property = await this.propertyRepo.create(dto);
 
     if (images && images.length > 0) {
       const fileNames = await Promise.all(
-        images.map(img => this.filesService.createFile(img))
+        images.map((img) => this.filesService.createFile(img)),
       );
 
       await Promise.all(
@@ -30,9 +36,8 @@ export class PropertyService {
             propertyId: property.id,
             imageUrl: name,
             isMain: index === 0,
-            
-          })
-        )
+          }),
+        ),
       );
     }
 
@@ -44,7 +49,8 @@ export class PropertyService {
 
     if (query.city) where.city = query.city;
     if (query.listingType) where.listingType = query.listingType;
-    if (query.propertyType) where.propertyType = { [Op.like]: `%${query.propertyType}%` };
+    if (query.propertyType)
+      where.propertyType = { [Op.like]: `%${query.propertyType}%` };
 
     if (query.priceFrom || query.priceTo) {
       where.price = {};
@@ -55,7 +61,6 @@ export class PropertyService {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 10;
     const offset = (page - 1) * limit;
-
 
     const { count, rows } = await this.propertyRepo.findAndCountAll({
       where,
@@ -84,16 +89,25 @@ export class PropertyService {
     return this.formatProperty(property);
   }
 
+  async getAll() {
+    const properties = await this.propertyRepo.findAll({
+      include: [PropertyImage], // Добавь сюда другие связанные модели, если нужно
+    });
+
+    return properties.map((property) => this.formatProperty(property));
+  }
+
   async getUserSubmitted(id: number) {
     return await this.propertyRepo.findAll({
-      where: { agentId:id },
+      where: { agentId: id },
       include: { all: true },
     });
   }
 
-
   async update(id: number, dto: UpdatePropertyDto, images: File[]) {
-    const property = await this.propertyRepo.findByPk(id, { include: { all: true } });
+    const property = await this.propertyRepo.findByPk(id, {
+      include: { all: true },
+    });
 
     if (!property) {
       throw new NotFoundException('Property not found');
@@ -102,22 +116,24 @@ export class PropertyService {
     await property.update(dto as any);
 
     if (images && images.length > 0) {
-      const oldImages = await this.imageRepo.findAll({ where: { propertyId: id } });
+      const oldImages = await this.imageRepo.findAll({
+        where: { propertyId: id },
+      });
 
       await Promise.all(
-        oldImages.map(async image => {
+        oldImages.map(async (image) => {
           try {
             await this.filesService.deleteFile(image.imageUrl);
           } catch (e) {
             console.warn(`Failed to delete image: ${image.imageUrl}`);
           }
-        })
+        }),
       );
 
       await this.imageRepo.destroy({ where: { propertyId: id } });
 
       const fileNames = await Promise.all(
-        images.map(img => this.filesService.createFile(img))
+        images.map((img) => this.filesService.createFile(img)),
       );
 
       await Promise.all(
@@ -126,8 +142,8 @@ export class PropertyService {
             propertyId: property.id,
             imageUrl: name,
             isMain: index === 0,
-          })
-        )
+          }),
+        ),
       );
     }
 
@@ -145,7 +161,7 @@ export class PropertyService {
     const obj = property.get({ plain: true });
     return {
       ...obj,
-      images: obj.images?.map(img => ({
+      images: obj.images?.map((img) => ({
         ...img,
         fullUrl: process.env.STATIC_URL + img.imageUrl,
       })),
