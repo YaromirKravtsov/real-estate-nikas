@@ -46,7 +46,7 @@ const NewAnnouncementPage = () => {
     }
   }, [token]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -57,7 +57,37 @@ const NewAnnouncementPage = () => {
       navigate(RouteNames.NEW);
     }
   }, [role]);
+  const scrollToIndex = (index: number) => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+    const thumbnailWidth = 120 + 8; // width + gap
+    scrollContainer.scrollTo({
+      left:
+        index * thumbnailWidth -
+        (scrollContainer.clientWidth - thumbnailWidth) / 2,
+      behavior: "smooth",
+    });
+  };
 
+  // При клике стрелки:
+  const handlePrev = () => {
+    const newIndex =
+      selectedImageIndex > 0 ? selectedImageIndex - 1 : images.length - 1;
+    setSelectedImageIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
+
+  const handleNext = () => {
+    const newIndex =
+      selectedImageIndex < images.length - 1 ? selectedImageIndex + 1 : 0;
+    setSelectedImageIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
+
+  // Прокручиваем при смене
+  useEffect(() => {
+    scrollToIndex(selectedImageIndex);
+  }, [selectedImageIndex]);
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -187,11 +217,7 @@ const NewAnnouncementPage = () => {
             style={{ minWidth: 0 }}
           >
             <button
-              onClick={() =>
-                setSelectedImageIndex((prev) =>
-                  prev > 0 ? prev - 1 : images.length - 1
-                )
-              }
+              onClick={handlePrev}
               className="btn btn-link p-0 text-decoration-none"
               style={{ fontSize: "2rem", color: "#333" }}
             >
@@ -199,13 +225,15 @@ const NewAnnouncementPage = () => {
             </button>
 
             <div
+              ref={scrollContainerRef}
               style={{
                 display: "flex",
                 gap: "0.5rem",
-                flexGrow: 1,
                 overflowX: "auto",
-                justifyContent: "center",
-                minWidth: 0,
+                overflowY: "hidden",
+                maxWidth: "100%",
+                flexShrink: 1,
+                flexWrap: "nowrap",
               }}
             >
               {images.map((file, idx) => (
@@ -229,11 +257,7 @@ const NewAnnouncementPage = () => {
             </div>
 
             <button
-              onClick={() =>
-                setSelectedImageIndex((prev) =>
-                  prev < images.length - 1 ? prev + 1 : 0
-                )
-              }
+              onClick={handleNext}
               className="btn btn-link p-0 text-decoration-none"
               style={{ fontSize: "2rem", color: "#333" }}
             >
@@ -260,7 +284,7 @@ const NewAnnouncementPage = () => {
         </div>
       </div>
 
-      <div className="mt-5 d-flex flex-column gap-3 w-100">
+      <div className="mt-5 d-flex flex-column gap-3 flex-grow-1">
         <label htmlFor="description" className="h5 fw-semibold">
           Опис
         </label>
