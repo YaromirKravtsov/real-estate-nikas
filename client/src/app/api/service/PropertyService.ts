@@ -25,7 +25,11 @@ export interface PropertyImage {
   isMain: boolean;
   fullUrl: string;
 }
-
+export interface PropertyAgent {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
 // Структура, возвращаемая с бэкенда
 export interface PropertyResponse {
   id: number;
@@ -42,6 +46,7 @@ export interface PropertyResponse {
   is_submission: boolean;
   agentId: number;
   images: PropertyImage[];
+  agent: PropertyAgent;
 }
 
 export default class PropertyService {

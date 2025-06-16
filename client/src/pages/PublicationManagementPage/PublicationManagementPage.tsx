@@ -61,7 +61,9 @@ const DetailAnnouncementPage = () => {
             </div>
 
             <div className="col-md-auto d-flex align-items-center gap-3">
-              <div className="fw-bold">?????: </div>
+              <div className="fw-bold">
+                {property.agent.firstName} {property.agent.lastName}
+              </div>
               <button className="custom-button">Опублікувати</button>
               <button className="custom-button red">Відмовити</button>
             </div>

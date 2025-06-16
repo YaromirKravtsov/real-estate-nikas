@@ -12,6 +12,7 @@ import { FilesService } from 'src/files/files.service';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { SearchPropertyDto } from './dto/search-property.dto';
 import { Op } from 'sequelize';
+import { User } from 'src/user/user.model';
 
 @Injectable()
 export class PropertyService {
@@ -91,7 +92,7 @@ export class PropertyService {
 
   async getAll() {
     const properties = await this.propertyRepo.findAll({
-      include: [PropertyImage], // Добавь сюда другие связанные модели, если нужно
+      include: [PropertyImage, { model: User, as: 'agent' }], // Добавь сюда другие связанные модели, если нужно
     });
 
     return properties.map((property) => this.formatProperty(property));
@@ -159,12 +160,20 @@ export class PropertyService {
 
   private formatProperty(property: Property) {
     const obj = property.get({ plain: true });
+
     return {
       ...obj,
       images: obj.images?.map((img) => ({
         ...img,
         fullUrl: process.env.STATIC_URL + img.imageUrl,
       })),
+      agent: obj.agent
+        ? {
+            id: obj.agent.id,
+            firstName: obj.agent.firstName,
+            lastName: obj.agent.lastName,
+          }
+        : null,
     };
   }
 }
