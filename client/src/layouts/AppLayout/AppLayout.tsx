@@ -3,17 +3,26 @@ import NavBar from '../NavBar/NavBar'
 import styles from './AppLayout.module.css'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import { useAuthStore } from '../../app/store/auth'
+import { useLocation } from 'react-router-dom'
+import { adminRoutes } from '../../app/router'
+import { useIsAdminPage } from '../../hooks/useIsInRoutes'
+import Header from '../AdminHeader/AdminHeader'
 interface Props {
   children: ReactNode
 }
 const AppLayout: FC<Props> = ({ children }) => {
-  const {role} = useAuthStore()
+  const { role } = useAuthStore()
+  const { pathname } = useLocation();
+
+  // показуємо AdminHeader, якщо роль – admin або поточний шлях – в переліку adminRoutes
+  const showAdminHeader = useIsAdminPage()
+
   return (
-    <div className={styles.page}>
-      
-      {role == 'admin' && <AdminHeader/> }
+    <div className={`${styles.page} ${showAdminHeader && styles.admin}`}>
+
+      {showAdminHeader && <AdminHeader />}
       <div className={styles.pageRow}>
-        <NavBar className ={styles.navBar}/>
+        {showAdminHeader && <NavBar className={styles.navBar} />}
         <div className={styles.main}>
           {children}
         </div>

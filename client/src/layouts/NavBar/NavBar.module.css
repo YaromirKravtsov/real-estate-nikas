@@ -1,34 +1,39 @@
 .navBar {
     display: flex;
     flex-direction: column;
-    width: 250px;
-
-   padding-left:60px ;
+    width: 300px;
+    padding: 25px 0;
+    padding-left: 30px;
     row-gap: 25px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 35.16px rgba(0, 0, 0, 0.08);
+
 }
 
 .navLink {
     display: flex;
     flex-direction: row;
-    column-gap: 25px;
+    column-gap: 15px;
     align-items: center;
 }
+
 .navLink:hover p {
-    color: #E53012;
+  /*   color: #E53012; */
 }
+
 .navLink p {
     font-family: "PT Sans", sans-serif;
     font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 28px;
-     color: #931B17;
-}
-.active p {
-    color: #E53012;
+    font-weight: 400;
+    font-size: 20;
+    line-height: 22px;
+    letter-spacing: 0.01em;
+    color: #5D7285;
 }
 
-.navLink p {}
+.active p {
+/*     color: #E53012; */
+}
 
 .navLink img {
     width: 40px;

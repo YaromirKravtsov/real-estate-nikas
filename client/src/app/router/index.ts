@@ -15,6 +15,7 @@ export interface IRoute {
 export enum RouteNames {
   LOGIN = "/login",
   MAIN = "/",
+  ADMIN_MAIN = "/admin",
   NEW = "/NewAnnouncementPage",
   DETAIL = "/DetailAnnouncementPage/:id",
   APPLICATIONS = "/SubmittedApplicationsPage",
@@ -24,13 +25,15 @@ export enum RouteNames {
 
 export const adminRoutes: IRoute[] = [
   {
-    path: RouteNames.MAIN,
+    path: RouteNames.ADMIN_MAIN,
     element: AdminPage,
   },
+
+  /* ,
   {
     path: RouteNames.USER,
     element: UserPage
-  }
+  } */
 ];
 
 export const userRoutes: IRoute[] = [

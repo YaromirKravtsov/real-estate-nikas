@@ -117,9 +117,6 @@ const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header />
-
-      {/* Hero Section */}
       <section
         className={styles.heroSection}
         style={{ backgroundImage: `url(${heroImage})` }}

@@ -21,7 +21,7 @@ export interface CreatePropertyDto {
 
 export interface UpdatePropertyDto extends Partial<CreatePropertyDto> {}
 
-const API_BASE = 'http://localhost:5000/properties';
+const API_BASE = 'http://localhost:5001/properties';
 
 export async function searchProperties(params: SearchPropertyDto) {
   const query = new URLSearchParams();
