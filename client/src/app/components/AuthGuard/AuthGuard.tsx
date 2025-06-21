@@ -31,8 +31,6 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
     }
     useEffect(() => {
         fetchCheckAuth()
-        
-        
     }, []);
 
     useEffect(() => {

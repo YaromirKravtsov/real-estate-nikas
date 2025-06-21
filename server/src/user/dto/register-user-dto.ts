@@ -28,5 +28,11 @@ export class RegisterUserDto {
   
   role: string
 
+   @ApiProperty({
+    description: 'The avatar image',
+    type: 'string',
+    format: 'binary', 
+    required: false,
+  })
   password: string
 }

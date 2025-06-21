@@ -67,8 +67,8 @@ export const useAuthStore = create<BearState>((set) => ({
     set({ isLoading: true });
     try {
       const response = await $api.get(`/token/refresh`, { withCredentials: true });
-      localStorage.setItem('token', response.data.accessToken);
-      const decodedToken: any = jwtDecode(response.data.accessToken);
+      localStorage.setItem('token', response.data);
+      const decodedToken: any = jwtDecode(response.data);
       console.log(decodedToken)
       set({
         userId: decodedToken.userId,

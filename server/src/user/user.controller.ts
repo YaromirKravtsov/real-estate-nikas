@@ -59,7 +59,7 @@ export class UserController {
   @ApiOperation({ summary: 'Create new user. For pages: Співробітник v2' })
   @ApiBody({
     description: 'Create a new user with an avatar',
-    type: RegisterUserDto,
+    type: CreateUserDto,
     required: true,
   })
   async createUser(@Body() dto: CreateUserDto, @UploadedFile() image: File) {

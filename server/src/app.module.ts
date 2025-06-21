@@ -55,3 +55,8 @@ import { PropertyRequest } from './property_request/property_request.model';
   ],
 })
 export class AppModule {}
+
+
+// Відправка заявки по створенню оголошення 
+// Прийняття та відхилення 
+// Інфа по всім заявкам
