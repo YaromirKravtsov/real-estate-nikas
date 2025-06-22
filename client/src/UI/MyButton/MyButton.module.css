@@ -7,12 +7,12 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background: #E53012;
-    font-family: "Inter", sans-serif;
-    border: none;
+    background: #FFAC12;
+
+    font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 21px;
+    font-weight: 700;
     color: #FFFFFF;
+    border: none;
+    border-radius: 20px;
 }

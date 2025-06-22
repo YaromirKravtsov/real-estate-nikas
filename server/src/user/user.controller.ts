@@ -53,9 +53,9 @@ export class UserController {
   @Roles(['admin'])
   @UseGuards(RoleGuard)
   @ApiBearerAuth()
-  @Post()
+  @Post('/agent')
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('profileImageUrl'))
   @ApiOperation({ summary: 'Create new user. For pages: Співробітник v2' })
   @ApiBody({
     description: 'Create a new user with an avatar',
@@ -73,7 +73,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update user by ID. For pages: Співробітник v2' })
   @ApiParam({ name: 'id' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('profileImageUrl'))
   async updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto, @UploadedFile() image: File) {
 
     return await this.userService.updateUser(Number(id), dto, image);

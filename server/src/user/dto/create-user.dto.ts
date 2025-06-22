@@ -10,14 +10,11 @@ export class CreateUserDto {
 
   @ApiProperty({ required: true, example: '+12121212' })
   @IsOptional()
-  readonly phone?: string;
+  readonly phoneNumber?: string;
 
   @ApiProperty({ required: true, example: 'yaromirkr@gmail.com' })
   readonly email?: string;
   @ApiProperty({ required: true, example: '123' })
-
-
-
   password: string;
   @ApiProperty({
     description: 'The avatar image',
@@ -27,8 +24,4 @@ export class CreateUserDto {
   })
   profileImageUrl: any; 
 
-
-  @IsOptional()
-  @IsString()
-  phoneNumber?: string;
 }

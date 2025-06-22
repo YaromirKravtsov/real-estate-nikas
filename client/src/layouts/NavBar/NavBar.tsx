@@ -50,7 +50,7 @@ const NavBar: React.FC<Props> = ({ className }) => {
     {
       text: 'Співробітники',
       icon: usersIcon,
-      link: RouteNames.ADMIN_MAIN,
+      link: RouteNames.USERS,
       activate: false
     },
   ])

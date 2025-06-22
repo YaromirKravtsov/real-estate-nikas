@@ -12,7 +12,7 @@ export class RegisterUserDto {
 
   @ApiProperty({ required: false, example: '+12121212' })
   @IsOptional()
-  readonly phone?: string;
+  readonly phoneNumber?: string;
 
   @ApiProperty({ required: false, example: 'yaromirkr@gmail.com' })
   readonly email?: string;

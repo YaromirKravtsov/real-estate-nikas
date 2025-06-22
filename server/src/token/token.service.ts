@@ -77,6 +77,7 @@ export class TokenService {
   };
 
   console.log('[REFRESH] New token payload:', payload);
+  console.log(user.profileImageUrl)
 
   const token = this.generateToken(payload);
 

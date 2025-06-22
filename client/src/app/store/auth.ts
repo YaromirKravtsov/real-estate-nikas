@@ -13,7 +13,7 @@ interface BearState {
   role: RoleType;
   firstName: string;
   lastName: string;
-  avatarLink: string;
+  profileImageUrl: string;
   isLoading: boolean;
   setLoggedIn: (value: boolean) => void;
   setRole: (role: RoleType) => void;
@@ -29,7 +29,7 @@ export const useAuthStore = create<BearState>((set) => ({
   firstName: '',
   lastName: '',
   position: '',
-  avatarLink: '',
+  profileImageUrl: '',
   authError: false,
   userId: 0,
   loggedIn: false,
@@ -53,7 +53,7 @@ export const useAuthStore = create<BearState>((set) => ({
         authError: false,
         firstName: decodedToken.firstName,
         lastName: decodedToken.lastName,
-        avatarLink: decodedToken.avatarLink,
+        profileImageUrl: decodedToken.profileImageUrl,
       });
       localStorage.setItem('token', data.accessToken);
     } catch (error: any) {
@@ -78,7 +78,7 @@ export const useAuthStore = create<BearState>((set) => ({
         authError: false,
         firstName: decodedToken.firstName,
         lastName: decodedToken.lastName,
-        avatarLink: decodedToken.avatarLink,
+        profileImageUrl: decodedToken.profileImageUrl,
       });
     } catch (error: any) {
       console.error(error.response?.data?.message);

@@ -26,7 +26,7 @@ export class UserService {
       if (!user) {
         throw new HttpException('Користувача не знайдено', HttpStatus.NOT_FOUND);
       }
-
+      console.log(this.buildUserWithFullImageUrl(user))
       return this.buildUserWithFullImageUrl(user);
     } catch (error) {
       throw new HttpException(
@@ -55,15 +55,23 @@ export class UserService {
 
   async createUser(dto: CreateUserDto, image?: File): Promise<any> {
     try {
+
       if (image) {
         const fileName = await this.filesService.createFile(image);
         dto['profileImageUrl'] = fileName;
       }
       dto['role'] = 'admin';
-    const hashPassword = await hash('admin', 3);
-      
-      const user = await this.userRepository.create({...dto, passwordHash: hashPassword});
-      return this.buildUserWithFullImageUrl(user);
+      const hashPassword = await hash('admin', 3);
+      console.log({ ...dto, passwordHash: hashPassword })
+      const user = await this.userRepository.create({ ...dto, passwordHash: hashPassword });
+      try {
+      const returnUser = this.buildUserWithFullImageUrl(user)
+        console.log(returnUser)
+        return returnUser;
+      } catch (err) {
+        console.log(err)
+      }
+
     } catch (err) {
       throw new HttpException(
         err.message || 'Помилка створення користувача',
@@ -73,7 +81,7 @@ export class UserService {
   }
 
   async updateUser(id: number, dto: UpdateUserDto, image?: File): Promise<any> {
-    const user = await this.getUser(id);
+    const user = await this.userRepository.findByPk(id);
 
     if (image) {
       const fileName = await this.filesService.createFile(image);
@@ -85,16 +93,16 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    const user = await this.getUser(id);
+    const user = await this.userRepository.findByPk(id);
     await user.destroy();
     return { message: 'Користувача видалено' };
   }
 
   private buildUserWithFullImageUrl(user: User) {
-    const userObj = user.get();
+    const userObj = user.toJSON();
     return {
       ...userObj,
-      profileImageFullUrl: userObj.profileImageUrl
+      profileImageUrl: userObj.profileImageUrl
         ? process.env.STATIC_URL + userObj.profileImageUrl
         : null,
     };

@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { ChangeEvent, FC } from "react";
 import styles from "./MyInput.module.css";
 
 interface MyInputProps {
     value: string;
-    setValue: (value: string) => void;
+    setValue?: (value: string) => void;
     placeholder?: string;
     className?: string;
     width?: number;
@@ -12,7 +12,9 @@ interface MyInputProps {
     hasError?: boolean;
     onEnter?: () => void;
     onKeyDown?:(e: React.KeyboardEvent<HTMLInputElement>)=> void;
-    onFocus?: ()=> void
+    onFocus?: ()=> void;
+    name?: string;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const MyInput: FC<MyInputProps> = (props) => {
@@ -25,10 +27,11 @@ const MyInput: FC<MyInputProps> = (props) => {
     return (
         <div className={`${styles.inputContainer} ${props.className}`}>
             <input
+            name={props.name}
             onFocus={props.onFocus}
                 onKeyDown={handleKeyDown}
                 value={props.value}
-                onChange={(e) => props.setValue(e.target.value)}
+                onChange={(e) => {props.setValue && props.setValue(e.target.value); props.onChange && props.onChange(e)}}
                 placeholder={props.placeholder}
                 className={`${props.className || ""} ${styles.input} ${props.disabled ? styles.disabled : ""
                     } ${props.hasError ? styles.errorBorder : ""}`} // Добавляем класс ошибки

@@ -4,7 +4,7 @@ import styles from './AdminHeader.module.css'
 import { RouteNames } from '../../app/router';
 import { useAuthStore } from '../../app/store/auth';
 export default function Header() {
-    const { firstName, lastName, avatarLink, userId, role } = useAuthStore()
+    const { firstName, lastName, profileImageUrl, userId, role } = useAuthStore()
     return (
         <div className={styles.header}>
             <div className={styles.logo}>
@@ -19,7 +19,8 @@ export default function Header() {
                         {role}
                     </p>
                 </div>
-                <img src={avatarLink} alt="" />
+                
+                <img src={profileImageUrl} alt="" />
             </Link>
         </div>
     );

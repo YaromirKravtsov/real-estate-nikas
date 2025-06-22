@@ -2,10 +2,11 @@ export interface IUser {
     id: number;
     firstName: string;
     lastName: string;
-    phone: string;
+    phoneNumber: string;
     email: string;
     role: 'admin' | 'user' | 'guest';  // Укажите все возможные значения роли
-    avatarLink: string | null;
+    profileImageUrl: string | null;
+    profileImageFullUrl: string | null;
   }
   
 

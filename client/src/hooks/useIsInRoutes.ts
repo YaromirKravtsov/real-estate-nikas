@@ -11,7 +11,8 @@ export function useIsAdminPage() {
   if (role !== 'admin') {
     return false;
   }
-
+  const path = '/' + pathname.split('/')[1]
+    console.log(path)
   // перевіряємо, чи поточний шлях у списку
-  return adminRoutes.map(r => r.path).includes(pathname);
+  return adminRoutes.map(r => r.path).includes(path);
 }
