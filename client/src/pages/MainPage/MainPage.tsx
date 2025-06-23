@@ -3,11 +3,10 @@ import Header from '../../layouts/AdminHeader/AdminHeader';
 import styles from './MainPage.module.scss';
 import PropertyCard from '../../layouts//PropertyCard/PropertyCard';
 
-
 import heroImage from '../../assets/images/hero-house.jpeg';
 import trustImage from '../../assets/images/people-meeting.jpg';
 
-import { searchProperties } from '../../app/api/property';
+import PropertyService from '../../app/api/service/PropertyService';
 
 type FilterKey = 'location' | 'type' | 'purpose' | 'price';
 
@@ -56,9 +55,9 @@ const MainPage: React.FC = () => {
 
       const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
 
-       const res = await searchProperties({
+       const res = await PropertyService.search({
         city: selectedFilters.location,
-        listingType, 
+        listingType,
         propertyType: selectedFilters.type,
         priceFrom,
         priceTo,
@@ -66,7 +65,7 @@ const MainPage: React.FC = () => {
         limit: 6,
       });
 
-      setResult(res.data || []);
+      setResult(res.data.data || []);
     } catch (e) {
       alert('Помилка пошуку: ' + e);
     } finally {
@@ -93,17 +92,17 @@ const MainPage: React.FC = () => {
 
         const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
 
-        const res = await searchProperties({
-          city: selectedFilters.location,
-          listingType,
-          propertyType: selectedFilters.type,
-          priceFrom,
-          priceTo,
-          page: 1,
-          limit: 6,
-        });
+        const res = await PropertyService.search({
+        city: selectedFilters.location,
+        listingType,
+        propertyType: selectedFilters.type,
+        priceFrom,
+        priceTo,
+        page: 1,
+        limit: 6,
+      });
 
-        setResult(res.data || []);
+        setResult(res.data.data || []);
       } catch (e) {
         alert('Помилка пошуку: ' + e);
       } finally {
@@ -184,13 +183,14 @@ const MainPage: React.FC = () => {
           {result?.map((item: any) => (
             <PropertyCard
               key={item.id}
+              id={item.id}
               imageUrl={`${item.images?.[0]?.imageUrl || 'default.jpg'}`}
               title={item.title}
               price={item.price}
               address={`${item.city}, ${item.address}`}
               bedrooms={item.bedrooms}
               bathrooms={item.bathrooms}
-              area="6x8 m²"
+              listingType={item.listingType}
             />
           ))}
         </div>

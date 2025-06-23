@@ -1,36 +1,56 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './PropertyCard.module.scss';
 
+const backendUrl = 'http://localhost:5001/static/';
+
 interface PropertyCardProps {
+  id: string;
   imageUrl: string;
   title: string;
   price: string;
   address: string;
   bedrooms: number;
   bathrooms: number;
-  area?: string;
+  listingType: 'rent' | 'sale';
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
+  id,
   imageUrl,
   title,
   price,
   address,
   bedrooms,
   bathrooms,
-  area,
+  listingType,
 }) => {
+  const navigate = useNavigate();
+
+  const getImageSrc = (url: string) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    return `${backendUrl}${url}`;
+  };
+
+  const handleClick = () => {
+    navigate(`/DetailAnnouncementPage/${id}`);
+  };
+
   return (
-    <div className={styles.card}>
-      <img src={imageUrl} alt={title} className={styles.image} />
+    <div className={styles.card} onClick={handleClick} style={{ cursor: 'pointer' }}>
+      <img src={getImageSrc(imageUrl)} alt={title} className={styles.image} />
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
-        <p className={styles.price}>${Number(price).toLocaleString()}/month</p>
+        <p className={styles.price}>
+          ${Number(price).toLocaleString()}
+          {listingType === 'rent' ? '/month' : ''}
+        </p>
         <p className={styles.address}>{address}</p>
         <div className={styles.details}>
           <span>🛏 {bedrooms} Beds</span>
           <span>🛁 {bathrooms} Bathrooms</span>
-          {area && <span>📐 {area}</span>}
         </div>
       </div>
     </div>
