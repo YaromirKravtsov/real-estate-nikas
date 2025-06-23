@@ -43,7 +43,7 @@ export interface IProperty {
   is_submission: boolean;
   agentId: number;
   agent?: IUser
-  images: string[]; // URL-адреси
+  images: PropertyImage[]; // URL-адреси
 }
 
 
@@ -52,4 +52,11 @@ export interface IPaginatedResponse<T> {
   page: number;
   limit: number;
   data: T[];
+}
+export interface PropertyImage {
+  id: number;
+  propertyId: number;
+  imageUrl: string;
+  isMain: boolean;
+  fullUrl: string;
 }

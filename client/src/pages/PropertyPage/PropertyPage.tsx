@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../layouts/PageLayout/PageLayout';
 import styles from './PropertyPage.module.css';
 import $api from '../../app/api/http';
-import { CreatePropertyDto, IProperty } from '../../models/IProperty';
+import { CreatePropertyDto, IProperty, PropertyImage } from '../../models/IProperty';
 import MyInput from '../../UI/MyInput/MyInput';
 import MySelect from '../../UI/MySelect/MySelect';
 import MyEditor from '../../UI/MyEditor/MyEditor';
 import ImageGalleryEditor from './ImageGalleryEditor';
 import InputRow from '../../UI/InputRow/InputRow';
+import { RouteNames } from '../../app/router';
 
 type IAction = 'create' | 'edit';
 
@@ -17,7 +18,7 @@ const PropertyPage: FC = () => {
     const action: IAction = id ? 'edit' : 'create';
 
     // Локальний стейт форми
-    const [form, setForm] = useState<CreatePropertyDto & { images: string[] }>({
+    const [form, setForm] = useState<CreatePropertyDto & { images: PropertyImage[] }>({
         title: '',
         price: 0,
         address: '',
@@ -38,6 +39,7 @@ const PropertyPage: FC = () => {
     const [deletedUrls, setDeletedUrls] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate()
     // При монтуванні, якщо edit — підвантажуємо існуючі дані
     useEffect(() => {
         if (action === 'edit' && id) {
@@ -100,6 +102,7 @@ const PropertyPage: FC = () => {
             // navigate(...)
         } finally {
             setLoading(false);
+            navigate(RouteNames.PROPERTIES)
         }
     };
 
@@ -208,7 +211,7 @@ const PropertyPage: FC = () => {
                         onDeleteUrl={url => {
                             setForm(f => ({
                                 ...f,
-                                images: f.images.filter(u => u !== url),
+                                images: f.images.filter(u => u.fullUrl !== url),
                             }));
                             setDeletedUrls(d => [...d, url]);
                         }}

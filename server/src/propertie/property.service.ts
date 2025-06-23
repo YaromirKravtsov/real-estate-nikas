@@ -21,7 +21,7 @@ export class PropertyService {
     @InjectModel(PropertyImage)
     private readonly imageRepo: typeof PropertyImage,
     private readonly filesService: FilesService,
-  ) {}
+  ) { }
 
   async create(dto: CreatePropertyDto, images: File[]) {
     console.log(dto, images)
@@ -71,14 +71,16 @@ export class PropertyService {
       offset,
     });
 
-    console.log(rows[0].images)
     return {
       total: count,
       page,
       limit,
-      data: rows.map(property => ({...property.toJSON(), images: property.toJSON().images.map(image => ({...image,
-        imageUrl: process.env.STATIC_URL + image.imageUrl
-      }))})),
+      data: rows.length <= 0 ? [] : rows.map(property => ({
+        ...property.toJSON(), images: property.toJSON().images.map(image => ({
+          ...image,
+          imageUrl: process.env.STATIC_URL + image.imageUrl
+        }))
+      })),
     };
   }
 
@@ -90,7 +92,7 @@ export class PropertyService {
     if (!property) {
       throw new HttpException('Обʼєкт не знайдено', HttpStatus.NOT_FOUND);
     }
-
+    //process.env.STATIC_URL
     return this.formatProperty(property);
   }
 
@@ -118,35 +120,61 @@ export class PropertyService {
       throw new NotFoundException('Property not found');
     }
 
-    await property.update(dto as any);
+    // Оновлюємо всі прості поля
+    const { deletedImages, ...updateData } = dto;
+    await property.update(updateData as any);
 
+    // 1) Видаляємо зазначені в DTO зображення
+    // Обробка deletedImages як рядка або масиву
+if (deletedImages) {
+  // Нормалізуємо до масиву URL-ів
+  const urls = Array.isArray(deletedImages) ? deletedImages : [deletedImages];
+
+  // Витягуємо імена файлів
+  const toDeleteNames = urls.map(url => {
+    const parts = url.split('/');
+    return parts[parts.length - 1];
+  });
+
+  // Знаходимо записи в БД
+  const imagesToDelete = await this.imageRepo.findAll({
+    where: {
+      propertyId: id,
+      imageUrl: toDeleteNames,  // Sequelize автоматично згенерує IN (...)
+    },
+  });
+
+  // Видаляємо файли з диску/сервісу
+  await Promise.all(imagesToDelete.map(img =>
+    this.filesService
+      .deleteFile(img.imageUrl)
+      .catch(() => console.warn(`Не вдалось видалити файл ${img.imageUrl}`))
+  ));
+
+  // Видаляємо записи з БД
+  await this.imageRepo.destroy({
+    where: {
+      propertyId: id,
+      imageUrl: toDeleteNames,
+    },
+  });
+}
+
+
+    // 2) Якщо прийшли нові файли — додаємо їх
     if (images && images.length > 0) {
-      const oldImages = await this.imageRepo.findAll({
-        where: { propertyId: id },
-      });
-
-      await Promise.all(
-        oldImages.map(async (image) => {
-          try {
-            await this.filesService.deleteFile(image.imageUrl);
-          } catch (e) {
-            console.warn(`Failed to delete image: ${image.imageUrl}`);
-          }
-        }),
-      );
-
-      await this.imageRepo.destroy({ where: { propertyId: id } });
-
+      // Завантажуємо нові у файловий сервіс
       const fileNames = await Promise.all(
-        images.map((img) => this.filesService.createFile(img)),
+        images.map(img => this.filesService.createFile(img)),
       );
 
+      // Створюємо записи в БД
       await Promise.all(
-        fileNames.map((name, index) =>
+        fileNames.map((name, idx) =>
           this.imageRepo.create({
             propertyId: property.id,
             imageUrl: name,
-            isMain: index === 0,
+            isMain: idx === 0,
           }),
         ),
       );
@@ -154,6 +182,7 @@ export class PropertyService {
 
     return await this.getOne(id);
   }
+
 
   async delete(id: number) {
     const property = await this.propertyRepo.findByPk(id);
@@ -170,13 +199,14 @@ export class PropertyService {
       images: obj.images?.map((img) => ({
         ...img,
         fullUrl: process.env.STATIC_URL + img.imageUrl,
+        imageUrl: process.env.STATIC_URL + img.imageUrl,
       })),
       agent: obj.agent
         ? {
-            id: obj.agent.id,
-            firstName: obj.agent.firstName,
-            lastName: obj.agent.lastName,
-          }
+          id: obj.agent.id,
+          firstName: obj.agent.firstName,
+          lastName: obj.agent.lastName,
+        }
         : null,
     };
   }

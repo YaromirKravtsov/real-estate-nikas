@@ -21,14 +21,15 @@ export enum RouteNames {
   MAIN = "/",
   ADMIN_MAIN = "/admin",
   NEW = "/NewAnnouncementPage",
-  DETAIL = "/DetailAnnouncementPage/:id",
+  DETAIL = "/property/:id",
   APPLICATIONS = "/SubmittedApplicationsPage",
   PUBLICATION = "/PublicationManagementPage",
   USER = '/user',
   USERS = "/users",
-  PROPERTIES = '/properties',
-  PROPERTY = '/property',
+  PROPERTIES = '/admin-properties',
+  PROPERTY = '/admin-property',
   SEARCH = '/search'
+
 }
 
 export const adminRoutes: IRoute[] = [

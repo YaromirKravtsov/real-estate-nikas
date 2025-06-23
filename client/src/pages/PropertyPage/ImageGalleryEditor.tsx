@@ -1,8 +1,9 @@
 import React, { FC, useRef, useState } from 'react';
 import styles from './PropertyPage.module.css';
+import { PropertyImage } from '../../models/IProperty';
 
 interface Props {
-  existingUrls: string[];             // URL-адреси фото, що вже є на сервері
+  existingUrls: PropertyImage[];             // URL-адреси фото, що вже є на сервері
   onAdd: (files: File[]) => void;     // додаємо нові файли
   onDeleteUrl: (url: string) => void; // видаляємо існуючі
 }
@@ -22,11 +23,11 @@ const ImageGalleryEditor: FC<Props> = ({ existingUrls, onAdd, onDeleteUrl }) => 
 
   return (
     <div className={styles.gallery}>
-      {/* Існуючі */}
+      
       {existingUrls.map(url => (
-        <div key={url} className={styles.item}>
-          <img src={url} alt="" />
-          <button onClick={() => onDeleteUrl(url)}>×</button>
+        <div key={url.fullUrl} className={styles.item}>
+          <img src={url.fullUrl} alt="" />
+          <button onClick={() => onDeleteUrl(url.fullUrl)}>×</button>
         </div>
       ))}
 
