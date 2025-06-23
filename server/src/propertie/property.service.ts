@@ -24,6 +24,7 @@ export class PropertyService {
   ) {}
 
   async create(dto: CreatePropertyDto, images: File[]) {
+    console.log(dto, images)
     const property = await this.propertyRepo.create(dto);
 
     if (images && images.length > 0) {
@@ -70,11 +71,14 @@ export class PropertyService {
       offset,
     });
 
+    console.log(rows[0].images)
     return {
       total: count,
       page,
       limit,
-      data: rows,
+      data: rows.map(property => ({...property.toJSON(), images: property.toJSON().images.map(image => ({...image,
+        imageUrl: process.env.STATIC_URL + image.imageUrl
+      }))})),
     };
   }
 

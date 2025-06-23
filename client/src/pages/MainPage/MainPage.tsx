@@ -184,7 +184,7 @@ const MainPage: React.FC = () => {
           {result?.map((item: any) => (
             <PropertyCard
               key={item.id}
-              imageUrl={`/uploads/${item.images?.[0]?.imageUrl || 'default.jpg'}`}
+              imageUrl={`${item.images?.[0]?.imageUrl || 'default.jpg'}`}
               title={item.title}
               price={item.price}
               address={`${item.city}, ${item.address}`}

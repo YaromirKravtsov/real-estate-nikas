@@ -31,7 +31,7 @@ const NavBar: React.FC<Props> = ({ className }) => {
     {
       text: 'Оголошення',
       icon: advIcon,
-      link: RouteNames.ADMIN_MAIN,
+      link: RouteNames.PROPERTIES,
       activate: false
     },
     {

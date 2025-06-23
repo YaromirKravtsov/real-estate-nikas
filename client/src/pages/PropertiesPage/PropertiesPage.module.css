@@ -1,0 +1,17 @@
+.main{
+    height: 100%;
+
+}
+.searchBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.price{
+    width: 120px;
+}
+
+.list{
+    margin-top: 20px;
+}

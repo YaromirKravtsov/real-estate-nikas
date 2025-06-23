@@ -1,0 +1,13 @@
+.form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    column-gap: 30px;
+    row-gap: 30px;
+}
+
+.item img{
+    width: 200px;
+    height: auto;
+}

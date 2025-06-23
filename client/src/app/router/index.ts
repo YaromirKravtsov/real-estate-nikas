@@ -8,6 +8,8 @@ import SubmittedApplicationsPage from "../../pages/SubmittedApplicationsPage/Sub
 import PublicationManagementPage from "../../pages/PublicationManagementPage/PublicationManagementPage";
 import UserPage from "../../pages/UserPage/UserPage";
 import UsersPage from "../../pages/UsersPage/UsersPage";
+import PropertiesPage from "../../pages/PropertiesPage/PropertiesPage";
+import PropertyPage from "../../pages/PropertyPage/PropertyPage";
 
 export interface IRoute {
   path: string;
@@ -21,8 +23,10 @@ export enum RouteNames {
   DETAIL = "/DetailAnnouncementPage/:id",
   APPLICATIONS = "/SubmittedApplicationsPage",
   PUBLICATION = "/PublicationManagementPage",
-  USER= '/user',
-  USERS = "/users"
+  USER = '/user',
+  USERS = "/users",
+  PROPERTIES = '/properties',
+  PROPERTY = '/property'
 }
 
 export const adminRoutes: IRoute[] = [
@@ -37,10 +41,22 @@ export const adminRoutes: IRoute[] = [
   {
     path: RouteNames.USER + '/:id',
     element: UserPage
-  } ,
+  },
   {
     path: RouteNames.USER,
     element: UserPage
+  },
+  {
+    path: RouteNames.PROPERTIES,
+    element: PropertiesPage
+  },
+  {
+    path: RouteNames.PROPERTY + '/:id',
+    element: PropertyPage
+  },
+  {
+    path: RouteNames.PROPERTY,
+    element: PropertyPage
   }
 ];
 

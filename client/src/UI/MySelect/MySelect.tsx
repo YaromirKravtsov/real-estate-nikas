@@ -2,9 +2,6 @@ import { useState, useRef, useEffect, FC } from "react";
 import styles from "./MySelect.module.css";
 import arrowSelect from "../../assets/images/arrow-down-s-fill.svg";
 import { SelectOption } from "../../models/SelectOption";
-/* import { SelectOption } from "../../models/SelectOption"; */
-
-
 
 interface MySelectProps {
     options: SelectOption[];
@@ -12,9 +9,8 @@ interface MySelectProps {
     className?: string;
     onChange: (value: string) => void;
     disabled?: boolean;
-    value?: string; // Проп для начального значения
-    hasError?: boolean; // Новое свойство для отображения ошибки
-    
+    value?: string; 
+    hasError?: boolean;
 }
 
 const MySelect: FC<MySelectProps> = (props) => {
@@ -87,7 +83,7 @@ const MySelect: FC<MySelectProps> = (props) => {
                         : props.placeholder}
                 </span>
                 <img
-                    src={arrowSelect}
+                    src={''}
                     alt="arrow select"
                     className={`${styles.arrow} ${isOpen ? styles.open : ""}`}
                 />
