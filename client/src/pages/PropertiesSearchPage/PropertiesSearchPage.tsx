@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../layouts/Header/Header';
-import styles from './MainPage.module.scss';
-import PropertyCard from '../../layouts//PropertyCard/PropertyCard';
-
-import heroImage from '../../assets/images/hero-house.jpeg';
-import trustImage from '../../assets/images/people-meeting.jpg';
+import styles from './PropertiesSearchPage.module.scss';
+import PropertyCard from '../../layouts/PropertyCard/PropertyCard';
 
 import PropertyService from '../../app/api/service/PropertyService';
 
@@ -116,40 +113,14 @@ const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <section className={styles.topContainer}
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <Header textColor="#fff" />
-        <section
-          className={styles.heroSection}
-        >
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>Чудові оселі, створені для вас</h1>
-            <p className={styles.heroDescription}>
-              На перший погляд здається, що все це має значення, адже найбільше задоволення приносить можливість творити. Ми здатні зробити все, що потрібно, докладаючи зусиль і точності, і саме це формує справжню основу наших дій.
-            </p>
-          </div>
-        </section>
-      </section>
-      {/* Trust Section */}
-      <section className={styles.trustSection}>
-        <img src={trustImage} alt="Trust" className={styles.trustImage} />
-        <div className={styles.trustContent}>
-          <div className={styles.sectionLine}></div>
-          <h2 className={styles.trustTitle}>Ви в надійних руках</h2>
-          <p className={styles.trustDescription}>
-              Наш підхід — це більше, ніж просто слова. Ми дбаємо про кожен аспект, щоб захистити вас від ризиків і забезпечити максимальний комфорт. Як досвідчені провідники у світі нерухомості, ми відкриваємо те, що раніше залишалося прихованим — від реальної цінності до справжнього задоволення.
-          </p>
-          <button className={styles.learnMoreButton}>Learn more</button>
-        </div>
-      </section>
+      <Header/>
 
       {/* Listings Section */}
       <section className={styles.listingsSection}>
         <div className={styles.sectionLine}></div>
         <h2 className={styles.listingsTitle}>Знайдіть своє нове місце для життя</h2>
-        
-        {/* 
+
+        {/* Filters */}
         <div className={styles.filters}>
           {filters.map(({ label, key, options }) => (
             <div
@@ -177,7 +148,7 @@ const MainPage: React.FC = () => {
               )}
             </div>
           ))}
-        </div> */}
+        </div>
 
         {/* Search Result */}
         {!loading && result?.length === 0 && <p>Нічого не знайдено</p>}

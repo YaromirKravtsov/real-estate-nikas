@@ -10,6 +10,7 @@ import UserPage from "../../pages/UserPage/UserPage";
 import UsersPage from "../../pages/UsersPage/UsersPage";
 import PropertiesPage from "../../pages/PropertiesPage/PropertiesPage";
 import PropertyPage from "../../pages/PropertyPage/PropertyPage";
+import PropertiesSearchPage from "../../pages/PropertiesSearchPage/PropertiesSearchPage";
 
 export interface IRoute {
   path: string;
@@ -26,7 +27,8 @@ export enum RouteNames {
   USER = '/user',
   USERS = "/users",
   PROPERTIES = '/properties',
-  PROPERTY = '/property'
+  PROPERTY = '/property',
+  SEARCH = '/search'
 }
 
 export const adminRoutes: IRoute[] = [
@@ -71,4 +73,5 @@ export const publicRoutes: IRoute[] = [
   { path: RouteNames.APPLICATIONS, element: SubmittedApplicationsPage },
   { path: RouteNames.MAIN, element: MainPage },
   { path: RouteNames.DETAIL, element: DetailAnnouncementPage },
+  { path: RouteNames.SEARCH, element: PropertiesSearchPage },
 ];
