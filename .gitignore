@@ -66,3 +66,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # === WhatsApp Web JS Caches ===
 .wwebjs_auth/
 .wwebjs_cache/
+
+server/.development.env

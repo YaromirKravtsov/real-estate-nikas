@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './PropertyCard.module.scss';
+import { RouteNames } from '../../app/router';
 
 const backendUrl = 'http://localhost:5001/static/';
 
@@ -35,7 +36,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   };
 
   const handleClick = () => {
-    navigate(`/DetailAnnouncementPage/${id}`);
+    navigate(`${RouteNames.DETAIL}/${id}`);
   };
 
   return (

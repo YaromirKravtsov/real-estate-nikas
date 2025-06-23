@@ -8,7 +8,7 @@ import * as bodyParser from 'body-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5001;
   const app = await NestFactory.create(AppModule);
 
   // Middleware
