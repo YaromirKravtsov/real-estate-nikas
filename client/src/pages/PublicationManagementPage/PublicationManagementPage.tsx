@@ -10,7 +10,7 @@ const BedIcon = FaBed as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const BathIcon = FaBath as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const RulerIcon = FaRuler as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 
-const DetailAnnouncementPage = () => {
+const PublicationManagementPage = () => {
   const [properties, setProperties] = useState<PropertyResponse[]>([]);
   const navigate = useNavigate(); // ← Хук для навигации\
   const handleCardClick = (property: PropertyResponse) => {
@@ -74,4 +74,4 @@ const DetailAnnouncementPage = () => {
   );
 };
 
-export default DetailAnnouncementPage;
+export default PublicationManagementPage;

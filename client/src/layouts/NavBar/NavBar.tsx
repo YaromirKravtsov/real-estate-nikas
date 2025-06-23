@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import styles from './NavBar.module.css'
-import CustomersIcon from '../../assets/svgs/CustomerIcon';
-import { RouteNames } from '../../app/router';
-import advIcon from '../../assets/images/advertisement.png'
-import aiIcon from '../../assets/images/ai_chat.png'
-import calendarIcon from '../../assets/images/calendar.png'
-import usersIcon from '../../assets/images/users.png'
+import React, { useEffect, useState } from "react";
+import styles from "./NavBar.module.css";
+import { RouteNames } from "../../app/router";
+import { Link, useLocation } from "react-router-dom";
 
+import {
+  FaBullhorn,
+  FaRobot,
+  FaCalendarAlt,
+  FaUsers,
+  FaFileAlt,
+} from "react-icons/fa";
 
-
-import { Link, useLocation } from 'react-router-dom';
-import { useIsAdminPage } from '../../hooks/useIsInRoutes';
-
+import { IconType } from "react-icons";
 
 interface Props {
-  className: string
+  className: string;
 }
 
 interface NavLink {
-  link: string,
+  link: string;
   activate: boolean;
   text: string;
-  icon: string
+  icon: IconType;
 }
 
 const NavBar: React.FC<Props> = ({ className }) => {
@@ -29,53 +29,69 @@ const NavBar: React.FC<Props> = ({ className }) => {
 
   const [navLinks, setNavLinks] = useState<NavLink[]>([
     {
-      text: 'Оголошення',
-      icon: advIcon,
+      text: "Оголошення",
+      icon: FaBullhorn,
       link: RouteNames.PROPERTIES,
-      activate: false
+      activate: false,
     },
     {
-      text: 'AI-Чат Асистент',
-      icon: aiIcon,
+      text: "AI-Чат Асистент",
+      icon: FaRobot,
       link: RouteNames.ADMIN_MAIN,
-      activate: false
-    },
-
-    {
-      text: 'Заявки',
-      icon: calendarIcon,
-      link: RouteNames.ADMIN_MAIN,
-      activate: false
+      activate: false,
     },
     {
-      text: 'Співробітники',
-      icon: usersIcon,
+      text: "Заявки",
+      icon: FaCalendarAlt,
+      link: RouteNames.PUBLICATION,
+      activate: false,
+    },
+    {
+      text: "Співробітники",
+      icon: FaUsers,
       link: RouteNames.USERS,
-      activate: false
+      activate: false,
     },
-  ])
+    {
+      text: "Заявки клієнтів",
+      icon: FaFileAlt,
+      link: RouteNames.APPLICATIONS,
+      activate: false,
+    },
+  ]);
 
   const activateNavElement = (link: string) => {
-    setNavLinks(navLinks.map(nav => ({ ...nav, activate: link == nav.link })))
-  }
-
+    setNavLinks(
+      navLinks.map((nav) => ({ ...nav, activate: nav.link === link }))
+    );
+  };
 
   useEffect(() => {
     const path = window.location.pathname;
-    const sectionFromUrl = '/' + path.split('/')[1];
-    activateNavElement(sectionFromUrl)
-    console.log(sectionFromUrl, navLinks)
-  }, [location])
+    const sectionFromUrl = "/" + path.split("/")[1];
+    activateNavElement(sectionFromUrl);
+  }, [location]);
 
   return (
     <div className={`${className} ${styles.navBar}`}>
-      {navLinks.map(navLink =>
-        <Link
-          key={navLink.link} to={navLink.link} className={`${styles.navLink} ${navLink.activate && styles.active}`}>
-          <img src={navLink.icon} alt={navLink.text + " Icon"} />
-          <p >{navLink.text}</p>
-        </Link>
-      )}
+      {navLinks.map((navLink) => {
+        const Icon = navLink.icon as React.ComponentType<{
+          size?: number;
+          color?: string;
+        }>;
+        return (
+          <Link
+            key={navLink.link}
+            to={navLink.link}
+            className={`${styles.navLink} ${
+              navLink.activate ? styles.active : ""
+            }`}
+          >
+            <Icon size={24} color="#000" />
+            <p>{navLink.text}</p>
+          </Link>
+        );
+      })}
     </div>
   );
 };
