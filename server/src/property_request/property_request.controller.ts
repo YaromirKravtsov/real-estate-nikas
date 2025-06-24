@@ -46,6 +46,14 @@ export class PropertyRequestController {
     return await this.service.createSubmissionRequest(dto, images);
   }
 
+  @Put('submit/action/:id')
+  @ApiOperation({ summary: 'Approve submit from user' })
+  @ApiResponse({ status: 201, description: 'Request for submitting successfully created. For page: Деталі заявки' })
+
+  async approveSumbit(@Param('id') id: number, @Body() {action}: {action: 'approve'}) {
+    return await this.service.approveSumbit(id, action);
+  }
+
   @Get('search')
   @ApiOperation({ summary: 'Search property requests by type. For pages: "подані заявки"' })
   @ApiResponse({ status: 200, description: 'Filtered list of requests' })

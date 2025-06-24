@@ -6,7 +6,7 @@ import { useAuthStore } from '../../app/store/auth'
 import { useLocation } from 'react-router-dom'
 import { adminRoutes } from '../../app/router'
 import { useIsAdminPage } from '../../hooks/useIsInRoutes'
-import Header from '../AdminHeader/AdminHeader'
+import Header from '../Header/Header'
 interface Props {
   children: ReactNode
 }
@@ -19,8 +19,8 @@ const AppLayout: FC<Props> = ({ children }) => {
 
   return (
     <div className={`${styles.page} ${showAdminHeader && styles.admin}`}>
-
-      {showAdminHeader && <AdminHeader />}
+   
+      {showAdminHeader ?<AdminHeader /> : <Header/>}
       <div className={styles.pageRow}>
         {showAdminHeader && <NavBar className={styles.navBar} />}
         <div className={styles.main}>

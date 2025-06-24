@@ -18,29 +18,43 @@ export class PropertyRequestService {
   ) { }
 
   async createViewRequest(dto: CreatePropertyViewDto) {
-    return await this.model.create({...dto,requestType: 1});
+    return await this.model.create({ ...dto, requestType: 1 });
   }
 
   async createSubmissionRequest(dto: CreatePropertySubmissionDto, images: File[]) {
-    const { name, phone, message,email, ...createPropertyDto } = dto;
+    const { name, phone, message, email, ...createPropertyDto } = dto;
     console.log(createPropertyDto)
     const property = await this.propertyService.create({
       ...createPropertyDto, is_submission: true
     }, images)
 
-    return await this.model.create({name, phone, message, email,propertyId: property.id,requestType: 2 });
+    return await this.model.create({ name, phone, message, email, propertyId: property.id, requestType: 2 });
+  }
+
+  async approveSumbit(id: number, action) {
+    if (action == 'approve')
+      await this.propertyService.approveSumbit(id, false)
+    else {
+      const req = await this.model.findOne({where: {propertyId: id}, include: [Property]})
+      console.log(id, req)
+        await req.destroy()
+        await this.propertyService.delete(req.propertyId)
+    }
   }
   async search(query: SearchPropertyRequestDto) {
     const where: any = {};
-
-    if (query.requestType !== undefined) {
+    const propertyWhere: any = {}
+    if (propertyWhere !== undefined) {
       where.requestType = query.requestType;
+      if (query.requestType == 2) {
+        propertyWhere.is_submission = true
+      }
     }
 
 
     return await this.model.findAll({
       where,
-      include: { model: Property, include: [User] },
+      include: { model: Property, include: [User], where: propertyWhere },
       order: [['createdAt', 'DESC']],
     });
   }

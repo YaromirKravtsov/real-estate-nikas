@@ -5,22 +5,39 @@ import PropertyService, {
   PropertyResponse,
 } from "../../app/api/service/PropertyService";
 import { useNavigate } from "react-router-dom";
+import { PropertyRequestsService, UserPropertyRequest } from "../../app/api/service/PropertyRequestsService";
+import { RouteNames } from "../../app/router";
 
 const BedIcon = FaBed as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const BathIcon = FaBath as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const RulerIcon = FaRuler as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 
 const PublicationManagementPage = () => {
-  const [properties, setProperties] = useState<PropertyResponse[]>([]);
+  const [properties, setProperties] = useState<UserPropertyRequest[]>([]);
   const navigate = useNavigate(); // ← Хук для навигации\
-  const handleCardClick = (property: PropertyResponse) => {
-    navigate(`/DetailAnnouncementPage/${property.id}`); // ← Навигация с id
+  const handleCardClick = (property: UserPropertyRequest) => {
+    navigate(RouteNames.PROPERTY_DETEIL + `/${property.property.id}`); // ← Навигация с id
   };
+
+  const fetchReqProperty = async () =>{
+    const {data} = await PropertyRequestsService.getSubmitPorperty()
+    setProperties(data)
+  }
   useEffect(() => {
-    PropertyService.getAllProperties()
-      .then((res) => setProperties(res.data))
-      .catch((err) => console.error("Failed to load properties:", err));
+      fetchReqProperty()
   }, []);
+
+  const publishProperty = async(id: number) => {
+    await PropertyRequestsService.approveSubmitProperty(id)
+    fetchReqProperty()
+  }
+
+    const rejectSubmitProperty = async(id: number) => {
+    await PropertyRequestsService.rejectSubmitProperty(id)
+    fetchReqProperty()
+  }
+
+  
 
   return (
     <div className="container py-4">
@@ -36,24 +53,24 @@ const PublicationManagementPage = () => {
           <div className="row g-4 align-items-center">
             <div className="col-md">
               <div className="d-flex align-items-baseline fw-bold fs-5">
-                <span className="text-warning">${property.price}</span>
+                <span className="text-warning">${property.property.price}</span>
                 <span className="text-muted ms-1 small">/month</span>
               </div>
 
               <div className="text-muted">
-                {property.address}, {property.city}
+                {property.property.address}, {property.property.city}
               </div>
 
               <div className="text-secondary small d-flex align-items-center gap-3">
                 <span>
-                  <BedIcon color="orange" /> {property.bedrooms} спалень
+                  <BedIcon color="orange" /> {property.property.bedrooms} спалень
                 </span>
                 <span>
-                  <BathIcon color="orange" /> {property.bathrooms} ванн
+                  <BathIcon color="orange" /> {property.property.bathrooms} ванн
                 </span>
-                {property.yearBuilt && (
+                {property.property.yearBuilt && (
                   <span>
-                    <RulerIcon color="orange" /> {property.yearBuilt} р.
+                    <RulerIcon color="orange" /> {property.property.yearBuilt} р.
                     побудови
                   </span>
                 )}
@@ -62,10 +79,28 @@ const PublicationManagementPage = () => {
 
             <div className="col-md-auto d-flex align-items-center gap-3">
               <div className="fw-bold">
-                {property.agent.firstName} {property.agent.lastName}
+                {property.name} 
               </div>
-              <button className="custom-button">Опублікувати</button>
-              <button className="custom-button red">Відмовити</button>
+              <button
+  className="custom-button"
+  onClick={e => {
+    e.stopPropagation();
+    publishProperty(property.property.id);
+  }}
+>
+  Опублікувати
+</button>
+
+<button
+  className="custom-button red"
+  onClick={e => {
+    e.stopPropagation();
+    rejectSubmitProperty(property.property.id);
+  }}
+>
+  Відмовити
+</button>
+
             </div>
           </div>
         </div>

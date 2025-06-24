@@ -7,9 +7,9 @@ export default function Header() {
     const { firstName, lastName, profileImageUrl, userId, role } = useAuthStore()
     return (
         <div className={styles.header}>
-            <div className={styles.logo}>
+            <Link to = '/' className={styles.logo}>
                 Nikas
-            </div>
+            </Link>
             <Link to = {RouteNames.USER + '/' + userId} className={styles.profile}>
                 <div className={styles.col}>
                     <h3>

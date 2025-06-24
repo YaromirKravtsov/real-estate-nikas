@@ -20,8 +20,8 @@ export enum RouteNames {
   LOGIN = "/login",
   MAIN = "/",
   ADMIN_MAIN = "/admin",
-  DETAIL = "/property",
-  NEW = "/NewAnnouncementPage",
+  PROPERTY_DETEIL = "/property",
+  NEW = "/create-from-user/property",
   APPLICATIONS = "/SubmittedApplicationsPage",
   PUBLICATION = "/admin-publicationManagementPage",
   USER = "/user",
@@ -82,6 +82,6 @@ export const publicRoutes: IRoute[] = [
   { path: RouteNames.LOGIN, element: LoginPage },
   { path: RouteNames.NEW, element: NewAnnouncementPage },
   { path: RouteNames.MAIN, element: MainPage },
-  { path: RouteNames.DETAIL + "/:id", element: DetailAnnouncementPage },
+  { path: RouteNames.PROPERTY_DETEIL + "/:id", element: DetailAnnouncementPage },
   { path: RouteNames.SEARCH, element: PropertiesSearchPage },
 ];

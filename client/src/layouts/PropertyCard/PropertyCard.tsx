@@ -36,7 +36,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   };
 
   const handleClick = () => {
-    navigate(`${RouteNames.DETAIL}/${id}`);
+    navigate(`${RouteNames.PROPERTY_DETEIL}/${id}`);
   };
 
   return (

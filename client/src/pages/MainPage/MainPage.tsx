@@ -62,7 +62,7 @@ const MainPage: React.FC = () => {
         priceFrom,
         priceTo,
         page: 1,
-        limit: 6,
+        limit:100,
       });
 
       setResult(res.data.data || []);
@@ -99,7 +99,7 @@ const MainPage: React.FC = () => {
         priceFrom,
         priceTo,
         page: 1,
-        limit: 6,
+        limit: 100,
       });
 
         setResult(res.data.data || []);
@@ -119,7 +119,7 @@ const MainPage: React.FC = () => {
       <section className={styles.topContainer}
         style={{ backgroundImage: `url(${heroImage})` }}
       >
-        <Header textColor="#fff" />
+
         <section
           className={styles.heroSection}
         >

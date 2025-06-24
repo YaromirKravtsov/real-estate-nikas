@@ -1,0 +1,100 @@
+/* Container */
+.formContainer {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+  color: #fff;
+}
+
+/* Left panel (inputs) */
+.fields {
+width: 50%;
+  display: flex;
+  flex-direction: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+/* Right panel (images) */
+.imagePanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mainImage {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 2px solid #444;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.thumbnail {
+  flex-shrink: 0;
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.selected {
+  border-color: #ffa500;
+}
+
+/* Thumbnail navigation buttons */
+.navButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Upload button */
+.uploadBtn {
+  padding: 0.5rem 1rem;
+  background-color: #ffa500;
+  color: #000;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Description */
+.descriptionSection {
+  margin-top: 2rem;
+}
+
+.descriptionLabel {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.descriptionTextarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  resize: vertical;
+  font-size: 1rem;
+  border: 1;
+}

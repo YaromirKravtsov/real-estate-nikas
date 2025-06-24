@@ -210,4 +210,11 @@ if (deletedImages) {
         : null,
     };
   }
+
+  async approveSumbit(propertyId:number, val: boolean){
+      const property =  await this.propertyRepo.findByPk(propertyId);
+      await property.update({is_submission: val})
+  }
 }
+
+

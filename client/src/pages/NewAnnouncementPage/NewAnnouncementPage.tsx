@@ -4,7 +4,13 @@ import { useNavigate } from "react-router";
 import { useAuthStore } from "../../app/store/auth";
 import { RouteNames } from "../../app/router";
 import PropertyService from "../../app/api/service/PropertyService";
-
+import PageLayout from "../../layouts/PageLayout/PageLayout";
+import styles from './NewAnnouncementPage.module.css'
+import MyInput from "../../UI/MyInput/MyInput";
+import MySelect from "../../UI/MySelect/MySelect";
+import MyEditor from "../../UI/MyEditor/MyEditor";
+import { ListingType, PropertyRequestsService,  SubmitPropertyDto } from "../../app/api/service/PropertyRequestsService";
+import { buildFormData } from "./helpers/buildFormData";
 function parseJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];
@@ -23,19 +29,28 @@ function parseJwt(token: string) {
 
 const NewAnnouncementPage = () => {
   const token = localStorage.getItem("token");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SubmitPropertyDto>({
+    // — Property fields —
     title: "",
     price: 0,
     address: "",
     city: "",
-    listingType: "sale",
+    listingType: "sale",         // відразу правильний юніон
     propertyType: "",
     bedrooms: 0,
     bathrooms: 0,
-    yearBuilt: 0,
+    yearBuilt: undefined,
     description: "",
     agentId: 0,
+    is_submission: false,        // обов’язкове поле
+
+    // — Contact fields —
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
+
 
   useEffect(() => {
     if (token) {
@@ -88,23 +103,7 @@ const NewAnnouncementPage = () => {
   useEffect(() => {
     scrollToIndex(selectedImageIndex);
   }, [selectedImageIndex]);
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        name === "price" ||
-        name === "bedrooms" ||
-        name === "bathrooms" ||
-        name === "yearBuilt"
-          ? Number(value)
-          : value,
-    }));
-  };
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -117,8 +116,10 @@ const NewAnnouncementPage = () => {
 
   const handleSubmit = async () => {
     try {
-      await PropertyService.createProperty(formData, images);
-      alert("Оголошення створено!");
+      await PropertyRequestsService.submitPorperty(buildFormData(formData, images));
+      alert("Дякуємо! Ваша заявка подана. Наш агент зв’яжеться з вами після перевірки.")
+      navigate(RouteNames.SEARCH)
+
     } catch (err) {
       console.error(err);
       alert("Помилка під час створення оголошення");
@@ -126,149 +127,125 @@ const NewAnnouncementPage = () => {
   };
 
   return (
-    <div className="container py-4">
-      <h1 className="display-4 fw-bold mb-3">Нове оголошення</h1>
+    <PageLayout actionTitle="Опублікувати" pageTitle="Додати оголошення" action={handleSubmit}>
+      <div className={styles.formContainer}>
+        <div className={styles.fields}>
+           <MyInput
+            name="name"
+            value={formData.name}
+            setValue={val => setFormData({ ...formData, name: val })}
+            placeholder="Імя"
+          />
+           <MyInput
+            name="email"
+            value={formData.email}
+            setValue={val => setFormData({ ...formData, email: val })}
+            placeholder="Email"
+          />
+           
 
-      <div
-        className="d-flex flex-nowrap gap-3 align-items-stretch"
-        style={{ minHeight: "100%" }}
-      >
-        <div className="flex-grow-2 d-flex flex-column gap-3">
-          <input
+
+          <MyInput
             name="title"
-            onChange={handleInputChange}
-            type="text"
-            className="form-control form-control-lg"
+            value={formData.title}
+            setValue={val => setFormData({ ...formData, title: val })}
             placeholder="Назва"
           />
-          <input
+
+          <MyInput
             name="price"
-            onChange={handleInputChange}
             type="number"
-            className="form-control form-control-lg"
+            value={String(formData.price)}
+            setValue={val => setFormData({ ...formData, price: Number(val) })}
             placeholder="Ціна у €"
           />
-          <input
+
+          <MyInput
             name="address"
-            onChange={handleInputChange}
-            type="text"
-            className="form-control form-control-lg"
+            value={formData.address}
+            setValue={val => setFormData({ ...formData, address: val })}
             placeholder="Адреса"
           />
-          <input
+
+          <MyInput
             name="city"
-            onChange={handleInputChange}
-            type="text"
-            className="form-control form-control-lg"
+            value={formData.city}
+            setValue={val => setFormData({ ...formData, city: val })}
             placeholder="Місто"
           />
-          <select
-            name="listingType"
-            onChange={handleInputChange}
-            className="form-control form-control-lg"
-            value={formData.listingType}
-          >
-            <option value="sale">sale</option>
-            <option value="rent">rent</option>
-          </select>
 
-          <input
+         <MySelect
+            options={[
+              { value: 'sale', label: 'Продаж' },
+              { value: 'rent', label: 'Оренда' }
+            ]}
+            value={formData.listingType}
+            onChange={val => setFormData({ ...formData, listingType: val as ListingType })}
+            placeholder="Тип оголошення"
+            className={styles.input}
+          />
+
+          <MyInput
             name="propertyType"
-            onChange={handleInputChange}
-            type="text"
-            className="form-control form-control-lg"
+            value={formData.propertyType}
+            setValue={val => setFormData({ ...formData, propertyType: val })}
             placeholder="Тип нерухомості"
           />
-          <input
+
+          <MyInput
             name="bedrooms"
-            onChange={handleInputChange}
             type="number"
-            className="form-control form-control-lg"
+            value={String(formData.bedrooms)}
+            setValue={val => setFormData({ ...formData, bedrooms: Number(val) })}
             placeholder="Кількість спалень"
           />
-          <input
+
+          <MyInput
             name="bathrooms"
-            onChange={handleInputChange}
             type="number"
-            className="form-control form-control-lg"
+            value={String(formData.bathrooms)}
+            setValue={val => setFormData({ ...formData, bathrooms: Number(val) })}
             placeholder="Кількість ванних кімнат"
           />
-          <input
+
+          <MyInput
             name="yearBuilt"
-            onChange={handleInputChange}
             type="number"
-            className="form-control form-control-lg"
+            value={String(formData.yearBuilt)}
+            setValue={val => setFormData({ ...formData, yearBuilt: Number(val) })}
             placeholder="Рік побудови"
           />
         </div>
 
-        <div className="flex-grow-1 d-flex flex-column">
+        <div className={styles.imagePanel}>
           {images.length > 0 && (
             <img
               src={URL.createObjectURL(images[selectedImageIndex])}
               alt="Вибране зображення"
-              className="img-fluid rounded border w-100"
-              style={{ height: 400, objectFit: "cover" }}
+              className={styles.mainImage}
             />
           )}
 
-          <div
-            className="d-flex align-items-center gap-3 mt-auto"
-            style={{ minWidth: 0 }}
-          >
-            <button
-              onClick={handlePrev}
-              className="btn btn-link p-0 text-decoration-none"
-              style={{ fontSize: "2rem", color: "#333" }}
-            >
-              ❮
-            </button>
+          <div className={styles.navContainer}>
+            <button onClick={handlePrev} className={styles.navButton}>❮</button>
 
-            <div
-              ref={scrollContainerRef}
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                overflowX: "auto",
-                overflowY: "hidden",
-                maxWidth: "100%",
-                flexShrink: 1,
-                flexWrap: "nowrap",
-              }}
-            >
+            <div ref={scrollContainerRef} className={styles.thumbnails}>
               {images.map((file, idx) => (
                 <img
                   key={idx}
                   src={URL.createObjectURL(file)}
-                  alt={`перегляд-${idx}`}
-                  className={`rounded border ${
-                    selectedImageIndex === idx ? "border-primary border-3" : ""
-                  }`}
-                  style={{
-                    height: 80,
-                    width: 120,
-                    objectFit: "cover",
-                    cursor: "pointer",
-                    flexShrink: 0,
-                  }}
+                  alt={`preview-${idx}`}
+                  className={`${styles.thumbnail} ${
+                    selectedImageIndex === idx ? styles.selected : ''}
+                  `}
                   onClick={() => setSelectedImageIndex(idx)}
                 />
               ))}
             </div>
 
-            <button
-              onClick={handleNext}
-              className="btn btn-link p-0 text-decoration-none"
-              style={{ fontSize: "2rem", color: "#333" }}
-            >
-              ❯
-            </button>
+            <button onClick={handleNext} className={styles.navButton}>❯</button>
 
-            <button
-              className="custom-button"
-              onClick={handleUploadClick}
-              style={{ whiteSpace: "nowrap", flexShrink: 0 }}
-            >
+            <button className={styles.uploadBtn} onClick={handleUploadClick}>
               Додати зображення
             </button>
           </div>
@@ -279,31 +256,24 @@ const NewAnnouncementPage = () => {
             accept="image/*"
             onChange={handleImageUpload}
             ref={fileInputRef}
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
           />
         </div>
       </div>
 
-      <div className="mt-5 d-flex flex-column gap-3 flex-grow-1">
-        <label htmlFor="description" className="h5 fw-semibold">
+      <div className={styles.descriptionSection}>
+        <label htmlFor="description" className={styles.descriptionLabel}>
           Опис
         </label>
-        <textarea
-          name="description"
-          id="description"
-          className="form-control p-3"
-          rows={6}
-          placeholder="Опис"
-          onChange={handleInputChange}
+        <MyEditor
+          className={styles.descriptionTextarea}
+          value={formData.description}
+setValue={val => setFormData(prev => ({...prev, description: val}))}
         />
-        <div className="d-flex justify-content-end">
-          <button className="custom-button" onClick={handleSubmit}>
-            Створити заявку
-          </button>
-        </div>
       </div>
-    </div>
+    </PageLayout>
   );
+
 };
 
 export default NewAnnouncementPage;

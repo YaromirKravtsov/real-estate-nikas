@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
+import { Link } from "react-router-dom";
+import { RouteNames } from "../../app/router";
 
 type HeaderProps = {
   textColor?: string;
@@ -15,21 +17,18 @@ const Header: React.FC<HeaderProps> = ({ textColor = "#000" }) => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo} style={{ color: textColor }}>
+      <Link to = '/' className={styles.logo} style={{ color: textColor }}>
         Nikas
-      </div>
+      </Link>
 
       <nav className={styles.nav}>
-        {['Оренда', 'Купівля', 'Продаж', 'Зв’язатися з нами'].map((item) => (
-          <button
-            key={item}
-            onClick={handleNavigate}
+         <Link
+            to={RouteNames.NEW}
             className={styles.navItem}
             style={{ color: textColor, background: 'none', border: 'none', cursor: 'pointer' }}
           >
-            {item}
-          </button>
-        ))}
+            Подати оголошення
+          </Link>
       </nav>
 
       <button className={styles.button} onClick={handleNavigate}>
