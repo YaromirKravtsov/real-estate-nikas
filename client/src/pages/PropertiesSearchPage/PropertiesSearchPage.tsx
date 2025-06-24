@@ -113,7 +113,7 @@ const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header/>
+{/*       <Header/> */}
 
       {/* Listings Section */}
       <section className={styles.listingsSection}>

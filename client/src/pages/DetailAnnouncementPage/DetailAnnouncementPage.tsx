@@ -4,12 +4,21 @@ import { useParams } from "react-router-dom";
 import PropertyService, {
   PropertyResponse,
 } from "../../app/api/service/PropertyService";
-
+import { PropertyRequestsService, ViewReq } from "../../app/api/service/PropertyRequestsService";
+import styles from './DetailAnnouncementPage.module.css'
+import InputRow from "../../UI/InputRow/InputRow";
+import MyInput from "../../UI/MyInput/MyInput";
+import MyButton from "../../UI/MyButton/MyButton";
 const DetailAnnouncementPage = () => {
   const { id } = useParams<{ id: string }>();
   const [property, setProperty] = useState<PropertyResponse | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [requestData, setRequestData] = useState<ViewReq>({
+    name: '',
+    email: '',
+    phone: ''
+  })
 
   useEffect(() => {
     if (!id) return;
@@ -58,6 +67,11 @@ const DetailAnnouncementPage = () => {
 
   if (!property) {
     return <div className="container py-4">Завантаження...</div>;
+  }
+
+  const handleViewRequest = async() => {
+    await PropertyRequestsService.viewRequest({...requestData, propertyId: property.id})
+    alert('Заявка подана!');
   }
 
   const images = [...property.images]
@@ -182,6 +196,37 @@ const DetailAnnouncementPage = () => {
         >
           {property.description || "Опис відсутній"}
         </div>
+      </div>
+
+      <div className={styles.reqestRow}>
+            <InputRow title="ФІО">
+              <MyInput 
+              value={requestData.name}
+              setValue={e => setRequestData(prev => 
+              ({...prev, name: e})
+              )}
+              />
+            </InputRow>
+              <InputRow title="Email">
+              <MyInput 
+              name="email"
+              value={requestData.email}
+              setValue={e => setRequestData(prev => 
+              ({...prev, email: e})
+              )}
+              />
+            </InputRow>
+            <InputRow title="Телефон">
+              <MyInput 
+              value={requestData.phone}
+              setValue={e => setRequestData(prev => 
+              ({...prev, phone: e})
+              )}
+              />
+            </InputRow>
+            <MyButton onClick={handleViewRequest}>
+              Хочу перегляд
+            </MyButton>
       </div>
     </div>
   );

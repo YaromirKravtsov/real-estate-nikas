@@ -67,13 +67,21 @@ export interface UserPropertyRequest {
   property: Property;
 }
 
+export interface ViewReq {
+  
+  name: string,
+  email: string,
+  phone: string,
+  propertyId?: number
+
+}
 // Тип відповіді — масив таких запитів
 export class PropertyRequestsService{
     static async submitPorperty(dto: FormData){
         await $api.post('property-views/submit', dto)
     }
-    static async getSubmitPorperty(): Promise<AxiosResponse<UserPropertyRequest[]>>{
-        return await $api.get('property-views/search?requestType=2')
+    static async getSubmitPorperty(type = 2): Promise<AxiosResponse<UserPropertyRequest[]>>{
+        return await $api.get('property-views/search?requestType=' + type)
     }
 
   static async changeSubmitPropertyAction(
@@ -100,6 +108,12 @@ export class PropertyRequestsService{
     return this.changeSubmitPropertyAction(reqId, 'reject');
   }
 
+
+   static async viewRequest(
+    viewRequestDto: ViewReq
+  ) {
+     await $api.post('property-views/view', viewRequestDto)
+  }
 
 
 

@@ -1,144 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaBed, FaBath, FaRuler } from "react-icons/fa";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { PropertyRequestsService, UserPropertyRequest } from "../../app/api/service/PropertyRequestsService";
+import { RouteNames } from "../../app/router";
+import MyButton from "../../UI/MyButton/MyButton";
+import $api from "../../app/api/http";
 
 const BedIcon = FaBed as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const BathIcon = FaBath as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const RulerIcon = FaRuler as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 
 // Массив заявок
-const applications = [
-  {
-    email: "example@email.com",
-    address: "м. Київ, вул. Хрещатик, 1",
-    details: [
-      { icon: BedIcon, value: "2" },
-      { icon: BathIcon, value: "1" },
-      { icon: RulerIcon, value: "60 м²" },
-    ],
-    contact: {
-      name: "Іван Петренко",
-      phone: "+38 (098) 123-45-67",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-  {
-    email: "olena@example.com",
-    address: "м. Львів, вул. Зелена, 12",
-    details: [
-      { icon: BedIcon, value: "1" },
-      { icon: BathIcon, value: "1" },
-      { icon: RulerIcon, value: "48 м²" },
-    ],
-    contact: {
-      name: "Олена Іванчук",
-      phone: "+38 (097) 456-78-90",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-  {
-    email: "artem.s@example.com",
-    address: "м. Харків, вул. Наукова, 22",
-    details: [
-      { icon: BedIcon, value: "3" },
-      { icon: BathIcon, value: "2" },
-      { icon: RulerIcon, value: "72 м²" },
-    ],
-    contact: {
-      name: "Артем Сидоренко",
-      phone: "+38 (093) 777-66-55",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-  {
-    email: "viktor.bond@example.com",
-    address: "м. Дніпро, вул. Центральна, 5",
-    details: [
-      { icon: BedIcon, value: "2" },
-      { icon: BathIcon, value: "1" },
-      { icon: RulerIcon, value: "58 м²" },
-    ],
-    contact: {
-      name: "Віктор Бондар",
-      phone: "+38 (095) 123-45-00",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-  {
-    email: "nata.kh@example.com",
-    address: "м. Запоріжжя, вул. Перемоги, 17",
-    details: [
-      { icon: BedIcon, value: "1" },
-      { icon: BathIcon, value: "1" },
-      { icon: RulerIcon, value: "40 м²" },
-    ],
-    contact: {
-      name: "Наталя Хоменко",
-      phone: "+38 (050) 654-32-10",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-  {
-    email: "andrii.m@example.com",
-    address: "м. Вінниця, вул. Пирогова, 8",
-    details: [
-      { icon: BedIcon, value: "2" },
-      { icon: BathIcon, value: "1" },
-      { icon: RulerIcon, value: "63 м²" },
-    ],
-    contact: {
-      name: "Андрій Мельник",
-      phone: "+38 (096) 888-77-66",
-    },
-    status: {
-      text: "Оброблена",
-      className: "custom-button",
-    },
-  },
-];
 
 const SubmittedApplicationsPage = () => {
+  const navigate = useNavigate()
+  const [applications, setApplications] = useState<UserPropertyRequest[]>([])
+
+
+  const fetchApplication = async () => {
+    const { data } = await PropertyRequestsService.getSubmitPorperty(1);
+    setApplications(data)
+  }
+
+  useEffect(() => {
+    fetchApplication()
+  }, [])
+  const handleCardClick = (property: UserPropertyRequest) => {
+    navigate(RouteNames.PROPERTY_DETEIL + `/${property.property.id}`); // ← Навигация с id
+  };
+
+  const handleRemove = async (id: number) => {
+    await $api.delete('property-views/' + id);
+    alert('Заявку удачно оброблено')
+    fetchApplication()
+  }
   return (
     <div className="container py-4">
       <h1 className="display-4 fw-bold mb-3">Подані заявки</h1>
 
-      {applications.map((app, i) => (
-        <div key={i} className="card shadow-lg rounded-4 p-4 mx-auto mb-4">
+      {applications.map((property, i) => (
+        <div
+          key={i}
+          className="card shadow-lg rounded-4 p-4 mx-auto mb-4"
+          style={{ cursor: "pointer" }}
+          onClick={() => handleCardClick(property)}
+        >
+
           <div className="row g-4 align-items-center">
             <div className="col-md">
-              <div className="fw-bold fs-5">{app.email}</div>
-              <div className="text-muted">{app.address}</div>
+              <div className="d-flex align-items-baseline fw-bold fs-5">
+                <span className="text-warning">${property.property.price}</span>
+                <span className="text-muted ms-1 small">/month</span>
+              </div>
+
+              <div className="text-muted">
+                {property.property.address}, {property.property.city}
+              </div>
+
               <div className="text-secondary small d-flex align-items-center gap-3">
-                {app.details.map(({ icon: Icon, value }, index) => (
-                  <span key={index}>
-                    <Icon color="orange" /> {value}
+                <span>
+                  <BedIcon color="orange" /> {property.property.bedrooms} спалень
+                </span>
+                <span>
+                  <BathIcon color="orange" /> {property.property.bathrooms} ванн
+                </span>
+                {property.property.yearBuilt && (
+                  <span>
+                    <RulerIcon color="orange" /> {property.property.yearBuilt} р.
+                    побудови
                   </span>
-                ))}
+                )}
               </div>
             </div>
+
             <div className="col-md-auto d-flex align-items-center gap-3">
-              <div>
-                <div className="fw-bold">{app.contact.name}</div>
-                <div className="fw-bold text-dark">{app.contact.phone}</div>
+              <div className="fw-bold">
+                {property.name} <br />
+                {property.phone} <br />
+                {property.email}
+
               </div>
-              <button className={app.status.className}>
-                {app.status.text}
-              </button>
+
+
             </div>
+            <MyButton
+              onClick={e => {
+                e.stopPropagation();
+                handleRemove(property.id);
+              }}
+            >
+              Оброблено
+            </MyButton>
           </div>
         </div>
       ))}

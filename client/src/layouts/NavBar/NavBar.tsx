@@ -34,12 +34,12 @@ const NavBar: React.FC<Props> = ({ className }) => {
       link: RouteNames.PROPERTIES,
       activate: false,
     },
-    {
+   /*  {
       text: "AI-Чат Асистент",
       icon: FaRobot,
       link: RouteNames.ADMIN_MAIN,
       activate: false,
-    },
+    }, */
     {
       text: "Заявки",
       icon: FaCalendarAlt,
