@@ -9,6 +9,8 @@ import styles from './DetailAnnouncementPage.module.css'
 import InputRow from "../../UI/InputRow/InputRow";
 import MyInput from "../../UI/MyInput/MyInput";
 import MyButton from "../../UI/MyButton/MyButton";
+import { useTranslations } from '../../store/translations';
+
 const DetailAnnouncementPage = () => {
   const { id } = useParams<{ id: string }>();
   const [property, setProperty] = useState<PropertyResponse | null>(null);
@@ -19,6 +21,9 @@ const DetailAnnouncementPage = () => {
     email: '',
     phone: ''
   })
+  const { translations } = useTranslations();
+  const t = translations();
+  
 
   useEffect(() => {
     if (!id) return;
@@ -88,31 +93,31 @@ const DetailAnnouncementPage = () => {
       >
         <div className="flex-grow-2 d-flex flex-column gap-3">
           <div className="form-control form-control-lg">
-            <strong>Назва:</strong> {property.title}
+            <strong>{t.title}:</strong> {property.title}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Ціна у €:</strong> {property.price}
+            <strong>{t.priceEuro}:</strong> {property.price}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Адреса:</strong> {property.address}
+            <strong>{t.address}:</strong> {property.address}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Місто:</strong> {property.city}
+            <strong>{t.city}:</strong> {property.city}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Тип оголошення:</strong> {property.listingType}
+            <strong>{t.listingType}:</strong> {property.listingType}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Тип нерухомості:</strong> {property.propertyType}
+            <strong>{t.propertyType}:</strong> {property.propertyType}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Кількість спалень:</strong> {property.bedrooms}
+            <strong>{t.bedrooms}:</strong> {property.bedrooms}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Кількість ванних кімнат:</strong> {property.bathrooms}
+            <strong>{t.bathrooms}:</strong> {property.bathrooms}
           </div>
           <div className="form-control form-control-lg">
-            <strong>Рік побудови:</strong> {property.yearBuilt || "—"}
+            <strong>{t.yearBuilt}:</strong> {property.yearBuilt || "—"}
           </div>
         </div>
 
@@ -120,7 +125,7 @@ const DetailAnnouncementPage = () => {
           {images.length > 0 ? (
             <img
               src={images[selectedImageIndex]}
-              alt="Вибране зображення"
+              alt="Selected"
               className="img-fluid rounded border w-100"
               style={{ height: 400, objectFit: "cover" }}
             />
@@ -129,7 +134,7 @@ const DetailAnnouncementPage = () => {
               className="d-flex justify-content-center align-items-center bg-light border rounded"
               style={{ height: 400 }}
             >
-              <span className="text-muted">Зображення відсутнє</span>
+              <span className="text-muted">{t.imagesNotAvailable}</span>
             </div>
           )}
 
@@ -187,46 +192,43 @@ const DetailAnnouncementPage = () => {
 
       <div className="mt-5 d-flex flex-column gap-3 flex-grow-1">
         <label htmlFor="description" className="h5 fw-semibold">
-          Опис
+          {t.description}
         </label>
         <div
           id="description"
           className="form-control p-3"
           style={{ height: 150, whiteSpace: "pre-wrap" }}
         >
-          {property.description || "Опис відсутній"}
+          {property.description || t.noDescription}
         </div>
       </div>
 
       <div className={styles.reqestRow}>
-            <InputRow title="ФІО">
-              <MyInput 
-              value={requestData.name}
-              setValue={e => setRequestData(prev => 
-              ({...prev, name: e})
-              )}
-              />
-            </InputRow>
-              <InputRow title="Email">
-              <MyInput 
-              name="email"
-              value={requestData.email}
-              setValue={e => setRequestData(prev => 
-              ({...prev, email: e})
-              )}
-              />
-            </InputRow>
-            <InputRow title="Телефон">
-              <MyInput 
-              value={requestData.phone}
-              setValue={e => setRequestData(prev => 
-              ({...prev, phone: e})
-              )}
-              />
-            </InputRow>
-            <MyButton onClick={handleViewRequest}>
-              Хочу перегляд
-            </MyButton>
+        <InputRow title={t.fullName}>
+          <MyInput 
+            value={requestData.name}
+            setValue={e => setRequestData(prev => ({ ...prev, name: e }))}
+          />
+        </InputRow>
+
+        <InputRow title={t.email}>
+          <MyInput 
+            name="email"
+            value={requestData.email}
+            setValue={e => setRequestData(prev => ({ ...prev, email: e }))}
+          />
+        </InputRow>
+
+        <InputRow title={t.phone}>
+          <MyInput 
+            value={requestData.phone}
+            setValue={e => setRequestData(prev => ({ ...prev, phone: e }))}
+          />
+        </InputRow>
+
+        <MyButton onClick={handleViewRequest}>
+          {t.wantToView}
+        </MyButton>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { RouteNames } from "../../app/router";
+import { useTranslations } from "../../store/translations";
 
 type HeaderProps = {
   textColor?: string;
@@ -10,10 +11,13 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ textColor = "#000" }) => {
   const navigate = useNavigate();
+  const { locale, translations } = useTranslations();
 
   const handleNavigate = () => {
     navigate(RouteNames.NEW);
   };
+
+  const t = translations();
 
   return (
     <header className={`${styles.header} userHeader`}>
@@ -27,12 +31,12 @@ const Header: React.FC<HeaderProps> = ({ textColor = "#000" }) => {
             className={styles.navItem}
             style={{ color: textColor, background: 'none', border: 'none', cursor: 'pointer' }}
           >
-            Шукати нерухомість
+            {t.searchProperty}
           </Link>
       </nav>
 
       <button className={styles.button} onClick={handleNavigate}>
-        Подати оголошення
+        {t.postAd}
         <span style={{ fontSize: '1.125rem' }}>→</span>
       </button>
     </header>

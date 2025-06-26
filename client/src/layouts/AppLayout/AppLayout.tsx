@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { adminRoutes } from '../../app/router'
 import { useIsAdminPage } from '../../hooks/useIsInRoutes'
 import Header from '../Header/Header'
+import Footer from '../Footer/Footer'
 interface Props {
   children: ReactNode
 }
@@ -23,6 +24,7 @@ const AppLayout: FC<Props> = ({ children }) => {
           {children}
         </div>
       </div>
+      <Footer/>
     </div>
   )
 }

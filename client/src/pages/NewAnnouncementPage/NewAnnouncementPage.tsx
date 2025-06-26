@@ -12,6 +12,8 @@ import MyEditor from "../../UI/MyEditor/MyEditor";
 import { ListingType, PropertyRequestsService, SubmitPropertyDto } from "../../app/api/service/PropertyRequestsService";
 import { buildFormData } from "./helpers/buildFormData";
 import InputRow from "../../UI/InputRow/InputRow";
+import { useTranslations } from '../../store/translations';
+
 function parseJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];
@@ -51,7 +53,8 @@ const NewAnnouncementPage = () => {
     phone: "",
     message: "",
   });
-
+  const { translations } = useTranslations();
+  const t = translations();
 
   useEffect(() => {
     if (token) {
@@ -128,123 +131,122 @@ const NewAnnouncementPage = () => {
   };
 
   return (
-    <PageLayout actionTitle="Додати оголошення" pageTitle="Додати оголошення" action={handleSubmit}>
+    <PageLayout actionTitle={t.addAnnouncement} pageTitle={t.addAnnouncement} action={handleSubmit}>
       <div className={styles.formContainer}>
         <div className={styles.fields}>
-          <InputRow title="Імя">
+          <InputRow title={t.name}>
             <MyInput
               name="name"
               value={formData.name}
               setValue={val => setFormData({ ...formData, name: val })}
-              placeholder="Імя"
+              placeholder={t.name}
             />
           </InputRow>
 
-          <InputRow title="Email">
+          <InputRow title={t.email}>
             <MyInput
               name="email"
               value={formData.email}
               setValue={val => setFormData({ ...formData, email: val })}
-              placeholder="Email"
+              placeholder={t.email}
             />
           </InputRow>
 
-          <InputRow title="Назва">
+          <InputRow title={t.title}>
             <MyInput
               name="title"
               value={formData.title}
               setValue={val => setFormData({ ...formData, title: val })}
-              placeholder="Назва"
+              placeholder={t.title}
             />
           </InputRow>
 
-          <InputRow title="Ціна у €">
+          <InputRow title={t.priceEuro}>
             <MyInput
               name="price"
               type="number"
               value={String(formData.price)}
               setValue={val => setFormData({ ...formData, price: Number(val) })}
-              placeholder="Ціна у €"
+              placeholder={t.priceEuro}
             />
           </InputRow>
 
-          <InputRow title="Адреса">
+          <InputRow title={t.address}>
             <MyInput
               name="address"
               value={formData.address}
               setValue={val => setFormData({ ...formData, address: val })}
-              placeholder="Адреса"
+              placeholder={t.address}
             />
           </InputRow>
 
-          <InputRow title="Місто">
+          <InputRow title={t.city}>
             <MyInput
               name="city"
               value={formData.city}
               setValue={val => setFormData({ ...formData, city: val })}
-              placeholder="Місто"
+              placeholder={t.city}
             />
           </InputRow>
 
-          <InputRow title="Тип оголошення">
+          <InputRow title={t.listingType}>
             <MySelect
               options={[
-                { value: 'sale', label: 'Продаж' },
-                { value: 'rent', label: 'Оренда' }
+                { value: 'sale', label: t.sale },
+                { value: 'rent', label: t.rent }
               ]}
               value={formData.listingType}
               onChange={val => setFormData({ ...formData, listingType: val as ListingType })}
-              placeholder="Тип оголошення"
+              placeholder={t.listingType}
               className={styles.input}
             />
           </InputRow>
 
-          <InputRow title="Тип нерухомості">
+          <InputRow title={t.propertyType}>
             <MyInput
               name="propertyType"
               value={formData.propertyType}
               setValue={val => setFormData({ ...formData, propertyType: val })}
-              placeholder="Тип нерухомості"
+              placeholder={t.propertyType}
             />
           </InputRow>
 
-          <InputRow title="Кількість спалень">
+          <InputRow title={t.bedrooms}>
             <MyInput
               name="bedrooms"
               type="number"
               value={String(formData.bedrooms)}
               setValue={val => setFormData({ ...formData, bedrooms: Number(val) })}
-              placeholder="Кількість спалень"
+              placeholder={t.bedrooms}
             />
           </InputRow>
 
-          <InputRow title="Кількість ванних кімнат">
+          <InputRow title={t.bathrooms}>
             <MyInput
               name="bathrooms"
               type="number"
               value={String(formData.bathrooms)}
               setValue={val => setFormData({ ...formData, bathrooms: Number(val) })}
-              placeholder="Кількість ванних кімнат"
+              placeholder={t.bathrooms}
             />
           </InputRow>
 
-          <InputRow title="Рік побудови">
+          <InputRow title={t.yearBuilt}>
             <MyInput
               name="yearBuilt"
               type="number"
               value={String(formData.yearBuilt)}
               setValue={val => setFormData({ ...formData, yearBuilt: Number(val) })}
-              placeholder="Рік побудови"
+              placeholder={t.yearBuilt}
             />
           </InputRow>
         </div>
-
 
         <div className={styles.imagePanel}>
           {images.length > 0 && (
             <img
               src={URL.createObjectURL(images[selectedImageIndex])}
-              alt="Вибране зображення"
+              alt={t.addImage}
               className={styles.mainImage}
             />
           )}
@@ -258,8 +260,7 @@ const NewAnnouncementPage = () => {
                   key={idx}
                   src={URL.createObjectURL(file)}
                   alt={`preview-${idx}`}
-                  className={`${styles.thumbnail} ${selectedImageIndex === idx ? styles.selected : ''}
-                  `}
+                  className={`${styles.thumbnail} ${selectedImageIndex === idx ? styles.selected : ''}`}
                   onClick={() => setSelectedImageIndex(idx)}
                 />
               ))}
@@ -268,7 +269,7 @@ const NewAnnouncementPage = () => {
             <button onClick={handleNext} className={styles.navButton}>❯</button>
 
             <button className={styles.uploadBtn} onClick={handleUploadClick}>
-              Додати зображення
+              {t.addImage}
             </button>
           </div>
 
@@ -281,11 +282,12 @@ const NewAnnouncementPage = () => {
             style={{ display: 'none' }}
           />
         </div>
+
       </div>
 
       <div className={styles.descriptionSection}>
         <label htmlFor="description" className={styles.descriptionLabel}>
-          Опис
+          {t.description}
         </label>
         <MyEditor
           className={styles.descriptionTextarea}
@@ -295,7 +297,6 @@ const NewAnnouncementPage = () => {
       </div>
     </PageLayout>
   );
-
 };
 
 export default NewAnnouncementPage;

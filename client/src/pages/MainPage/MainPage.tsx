@@ -8,6 +8,7 @@ import trustImage from '../../assets/images/people-meeting.jpg';
 
 import PropertyService from '../../app/api/service/PropertyService';
 import { useLocation } from 'react-router-dom';
+import { useTranslations } from '../../store/translations';
 
 type FilterKey = 'location' | 'type' | 'purpose' | 'price';
 
@@ -22,9 +23,8 @@ const MainPage: React.FC = () => {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-
-
-
+  const { translations } = useTranslations();
+  const t = translations();
 
   const filters: { label: string; key: FilterKey; options: string[] }[] = [
     { label: 'Місце розташування', key: 'location', options: ['Київ', 'Львів', 'Одеса', 'Харків'] },
@@ -92,10 +92,8 @@ const MainPage: React.FC = () => {
           className={styles.heroSection}
         >
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>Чудові оселі, створені для вас</h1>
-            <p className={styles.heroDescription}>
-              На перший погляд здається, що все це має значення, адже найбільше задоволення приносить можливість творити. Ми здатні зробити все, що потрібно, докладаючи зусиль і точності, і саме це формує справжню основу наших дій.
-            </p>
+            <h1 className={styles.heroTitle}> {t.heroTitle} </h1>
+            <p className={styles.heroDescription}> {t.heroDescription} </p>
           </div>
         </section>
       </section>
@@ -104,18 +102,16 @@ const MainPage: React.FC = () => {
         <img src={trustImage} alt="Trust" className={styles.trustImage} />
         <div className={styles.trustContent}>
           <div className={styles.sectionLine}></div>
-          <h2 className={styles.trustTitle}>Ви в надійних руках</h2>
-          <p className={styles.trustDescription}>
-            Наш підхід — це більше, ніж просто слова. Ми дбаємо про кожен аспект, щоб захистити вас від ризиків і забезпечити максимальний комфорт. Як досвідчені провідники у світі нерухомості, ми відкриваємо те, що раніше залишалося прихованим — від реальної цінності до справжнього задоволення.
-          </p>
-          <button className={styles.learnMoreButton}>Learn more</button>
+          <h2 className={styles.trustTitle}> {t.trustTitle}</h2>
+          <p className={styles.trustDescription}> {t.trustDescription} </p>
+          <button className={styles.learnMoreButton}> {t.learnMore} </button>
         </div>
       </section>
 
       {/* Listings Section */}
       <section className={styles.listingsSection}>
         <div className={styles.sectionLine}></div>
-        <h2 className={styles.listingsTitle}>Знайдіть своє нове місце для життя</h2>
+        <h2 className={styles.listingsTitle}> {t.listingsTitle} </h2>
 
         {/* 
         <div className={styles.filters}>

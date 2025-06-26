@@ -5,6 +5,8 @@ import PropertyCard from '../../layouts/PropertyCard/PropertyCard';
 
 import PropertyService from '../../app/api/service/PropertyService';
 
+import { useTranslations } from '../../store/translations';
+
 type FilterKey = 'location' | 'type' | 'purpose' | 'price';
 
 const purposeMapping: Record<string, string> = {
@@ -12,11 +14,13 @@ const purposeMapping: Record<string, string> = {
   'Оренда': 'rent',
 };
 
-const MainPage: React.FC = () => {
+const PropertiesSearchPage: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<FilterKey | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<Partial<Record<FilterKey, string>>>({});
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { translations } = useTranslations();
+  const t = translations();
 
   const toggleDropdown = (name: FilterKey) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
@@ -27,11 +31,11 @@ const MainPage: React.FC = () => {
     setOpenDropdown(null);
   };
 
-  const filters: { label: string; key: FilterKey; options: string[] }[] = [
-    { label: 'Місце розташування', key: 'location', options: ['Київ', 'Львів', 'Одеса', 'Харків'] },
-    { label: 'Тип нерухомості', key: 'type', options: ['Квартира', 'Будинок', 'Комерційна'] },
-    { label: 'Шукаєте', key: 'purpose', options: ['Купівля', 'Оренда'] },
-    { label: 'Ціна', key: 'price', options: ['< $50,000', '$50,000–$100,000', '> $100,000'] },
+ const filters: { label: string; key: FilterKey; options: string[] }[] = [
+    { label: t.filterLocation, key: 'location', options: ['Київ', 'Львів', 'Одеса', 'Харків'] },
+    { label: t.filterType, key: 'type', options: ['Квартира', 'Будинок', 'Комерційна'] },
+    { label: t.filterPurpose, key: 'purpose', options: ['Купівля', 'Оренда'] },
+    { label: t.filterPrice, key: 'price', options: ['< $50,000', '$50,000–$100,000', '> $100,000'] },
   ];
 
   const handleSearch = async () => {
@@ -113,14 +117,10 @@ const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-{/*       <Header/> */}
-
-      {/* Listings Section */}
       <section className={styles.listingsSection}>
         <div className={styles.sectionLine}></div>
-        <h2 className={styles.listingsTitle}>Знайдіть своє нове місце для життя</h2>
+        <h2 className={styles.listingsTitle}>{t.listingsTitle}</h2>
 
-        {/* Filters */}
         <div className={styles.filters}>
           {filters.map(({ label, key, options }) => (
             <div
@@ -150,8 +150,7 @@ const MainPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Search Result */}
-        {!loading && result?.length === 0 && <p>Нічого не знайдено</p>}
+        {!loading && result?.length === 0 && <p>{t.nothingFound}</p>}
 
         <div className={styles.resultsGrid}>
           {result?.map((item: any) => (
@@ -173,4 +172,4 @@ const MainPage: React.FC = () => {
   );
 };
 
-export default MainPage;
+export default PropertiesSearchPage;
