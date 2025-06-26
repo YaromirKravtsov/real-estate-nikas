@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from './ImagePicker.module.css';
+import { useTranslations } from '../../store/translations';
 
 export interface ImagePickerProps {
   initialImageUrl?: string | null;
@@ -18,6 +19,8 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
 }) => {
   const [preview, setPreview] = useState<string | undefined>(initialImageUrl ?? undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { translations } = useTranslations();
+  const t = translations();
 
   // 1) Слід оновлювати preview кожного разу, коли initialImageUrl змінюється:
   useEffect(() => {
@@ -47,7 +50,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
         {preview && (
           <img
             src={preview}
-            alt="Preview"
+            alt={t.previewAlt || "Preview"}
             className={imageClassName}
           />
         )}
@@ -64,7 +67,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
         className={buttonClassName || styles.uploadButton}
         onClick={() => fileInputRef.current?.click()}
       >
-        Завантажити фото
+        {t.uploadPhoto || "Upload photo"}
       </button>
     </>
   );

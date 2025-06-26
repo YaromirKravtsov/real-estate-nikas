@@ -4,11 +4,15 @@ import styles from './PropertiesPage.module.css';
 import $api from '../../app/api/http';
 import { IPaginatedResponse, IProperty, SearchPropertyDto } from '../../models/IProperty';
 import PropertiesList from './components/PropertiesList';
-import Pagination from './components/Pagination';
 import PropertySearchBar from './components/PropertySearchBar';
-import { useBeforeUnload, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../app/router';
+import { useTranslations } from '../../store/translations';
+
 const PropertiesPage: React.FC = () => {
+  const { translations } = useTranslations();
+  const t = translations();
+
   const [filters, setFilters] = useState<SearchPropertyDto>({
     city: '',
     listingType: undefined,
@@ -22,7 +26,8 @@ const PropertiesPage: React.FC = () => {
   const [response, setResponse] = useState<IPaginatedResponse<IProperty> | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const fetchProperties = async () => {
     setLoading(true);
     const params = new URLSearchParams();
@@ -50,29 +55,22 @@ const PropertiesPage: React.FC = () => {
     setFilters(f => ({
       ...f,
       ...newFilters,
-      page: 1, // якщо змінили критерії — відкриваємо 1-шу сторінку
+      page: 1,
     }));
   };
 
- /*  const onPageChange = (page: number) => {
-    setFilters(f => ({ ...f, page }));
-  }; */
-
   return (
     <PageLayout
-      pageTitle="Нерухомість"
-      actionTitle="Додати оголошення"
+      pageTitle={t.propertiesPageTitle}
+      actionTitle={t.propertiesAddButton}
       action={() => navigate(RouteNames.PROPERTY)}
     >
       <div className={styles.main}>
         <PropertySearchBar filters={filters} onSearch={onSearch} />
         {loading ? (
-          <p>Завантаження...</p>
+          <p>{t.propertiesLoading}</p>
         ) : (
-          <>
-            <PropertiesList properties={response?.data || []} />
-            
-          </>
+          <PropertiesList properties={response?.data || []} />
         )}
       </div>
     </PageLayout>

@@ -1,12 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import { FaBed, FaBath, FaRuler } from "react-icons/fa";
-import PropertyService, {
-  PropertyResponse,
-} from "../../app/api/service/PropertyService";
 import { useNavigate } from "react-router-dom";
-import { PropertyRequestsService, UserPropertyRequest } from "../../app/api/service/PropertyRequestsService";
+
 import { RouteNames } from "../../app/router";
+import { PropertyRequestsService, UserPropertyRequest } from "../../app/api/service/PropertyRequestsService";
+import { useTranslations } from "../../store/translations";
 
 const BedIcon = FaBed as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const BathIcon = FaBath as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
@@ -14,34 +13,36 @@ const RulerIcon = FaRuler as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 
 const PublicationManagementPage = () => {
   const [properties, setProperties] = useState<UserPropertyRequest[]>([]);
-  const navigate = useNavigate(); // ← Хук для навигации\
+  const navigate = useNavigate();
+  const { translations } = useTranslations();
+  const t = translations();
+
   const handleCardClick = (property: UserPropertyRequest) => {
-    navigate(RouteNames.PROPERTY_DETEIL + `/${property.property.id}`); // ← Навигация с id
+    navigate(RouteNames.PROPERTY_DETEIL + `/${property.property.id}`);
   };
 
-  const fetchReqProperty = async () =>{
-    const {data} = await PropertyRequestsService.getSubmitPorperty()
-    setProperties(data)
-  }
+  const fetchReqProperty = async () => {
+    const { data } = await PropertyRequestsService.getSubmitPorperty();
+    setProperties(data);
+  };
+
   useEffect(() => {
-      fetchReqProperty()
+    fetchReqProperty();
   }, []);
 
-  const publishProperty = async(id: number) => {
-    await PropertyRequestsService.approveSubmitProperty(id)
-    fetchReqProperty()
-  }
+  const publishProperty = async (id: number) => {
+    await PropertyRequestsService.approveSubmitProperty(id);
+    fetchReqProperty();
+  };
 
-    const rejectSubmitProperty = async(id: number) => {
-    await PropertyRequestsService.rejectSubmitProperty(id)
-    fetchReqProperty()
-  }
-
-  
+  const rejectSubmitProperty = async (id: number) => {
+    await PropertyRequestsService.rejectSubmitProperty(id);
+    fetchReqProperty();
+  };
 
   return (
     <div className="container py-4">
-      <h1 className="display-4 fw-bold mb-3">Управління публікаціями</h1>
+      <h1 className="display-4 fw-bold mb-3">{t.publicationManagementTitle}</h1>
 
       {properties.map((property, i) => (
         <div
@@ -63,44 +64,40 @@ const PublicationManagementPage = () => {
 
               <div className="text-secondary small d-flex align-items-center gap-3">
                 <span>
-                  <BedIcon color="orange" /> {property.property.bedrooms} спалень
+                  <BedIcon color="orange" /> {property.property.bedrooms} {t.beds}
                 </span>
                 <span>
-                  <BathIcon color="orange" /> {property.property.bathrooms} ванн
+                  <BathIcon color="orange" /> {property.property.bathrooms} {t.baths}
                 </span>
                 {property.property.yearBuilt && (
                   <span>
-                    <RulerIcon color="orange" /> {property.property.yearBuilt} р.
-                    побудови
+                    <RulerIcon color="orange" /> {property.property.yearBuilt} {t.yearBuiltSuffix}
                   </span>
                 )}
               </div>
             </div>
 
             <div className="col-md-auto d-flex align-items-center gap-3">
-              <div className="fw-bold">
-                {property.name} 
-              </div>
+              <div className="fw-bold">{property.name}</div>
               <button
-  className="custom-button"
-  onClick={e => {
-    e.stopPropagation();
-    publishProperty(property.property.id);
-  }}
->
-  Опублікувати
-</button>
+                className="custom-button"
+                onClick={e => {
+                  e.stopPropagation();
+                  publishProperty(property.property.id);
+                }}
+              >
+                {t.publish}
+              </button>
 
-<button
-  className="custom-button red"
-  onClick={e => {
-    e.stopPropagation();
-    rejectSubmitProperty(property.property.id);
-  }}
->
-  Відмовити
-</button>
-
+              <button
+                className="custom-button red"
+                onClick={e => {
+                  e.stopPropagation();
+                  rejectSubmitProperty(property.property.id);
+                }}
+              >
+                {t.reject}
+              </button>
             </div>
           </div>
         </div>

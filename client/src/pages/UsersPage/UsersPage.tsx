@@ -7,6 +7,8 @@ import { IUser } from '../../models/IUser'
 import UsersList from './components/UsersList/UsersList'
 import { useNavigate } from 'react-router-dom'
 import { RouteNames } from '../../app/router'
+import { useTranslations } from '../../store/translations';
+
 const UsersPage = () => {
     const [users, setUsers] = useState<IUser[]>([])
     const navigate = useNavigate()
@@ -17,12 +19,14 @@ const UsersPage = () => {
         const {data} = await $api.get('/users?searchQuery='+val);
         setUsers(data)
     }
+    const { translations } = useTranslations();
+    const t = translations();
 
     useEffect(()=>{
         handleSearch('')
     },[])
   return (
-    <PageLayout pageTitle = "Співробітники" actionTitle = 'Створити співробітника'
+    <PageLayout pageTitle = {t.employees} actionTitle = {t.createEmployee}
      action = {handleAction}  >
         <div className={styles.main}>
             <SearchBar handleSearch = {handleSearch} />

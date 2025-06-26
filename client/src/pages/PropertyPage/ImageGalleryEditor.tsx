@@ -1,29 +1,30 @@
 import React, { FC, useRef, useState } from 'react';
 import styles from './PropertyPage.module.css';
 import { PropertyImage } from '../../models/IProperty';
+import { useTranslations } from '../../store/translations';
 
 interface Props {
-  existingUrls: PropertyImage[];             // URL-адреси фото, що вже є на сервері
-  onAdd: (files: File[]) => void;     // додаємо нові файли
-  onDeleteUrl: (url: string) => void; // видаляємо існуючі
+  existingUrls: PropertyImage[];
+  onAdd: (files: File[]) => void;
+  onDeleteUrl: (url: string) => void;
 }
 
 const ImageGalleryEditor: FC<Props> = ({ existingUrls, onAdd, onDeleteUrl }) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [previews, setPreviews] = useState<string[]>([]);
+  const { translations } = useTranslations();
+  const t = translations();
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     onAdd(files);
 
-    // локальні прев’ю
     const urls = files.map(f => URL.createObjectURL(f));
     setPreviews(p => [...p, ...urls]);
   };
 
   return (
     <div className={styles.gallery}>
-      
       {existingUrls.map(url => (
         <div key={url.fullUrl} className={styles.item}>
           <img src={url.fullUrl} alt="" />
@@ -31,14 +32,12 @@ const ImageGalleryEditor: FC<Props> = ({ existingUrls, onAdd, onDeleteUrl }) => 
         </div>
       ))}
 
-      {/* Нові прев’ю */}
       {previews.map(url => (
         <div key={url} className={styles.item}>
           <img src={url} alt="" />
         </div>
       ))}
 
-      {/* Кнопка додавання */}
       <div className={styles.add}>
         <input
           ref={fileRef}
@@ -48,7 +47,7 @@ const ImageGalleryEditor: FC<Props> = ({ existingUrls, onAdd, onDeleteUrl }) => 
           style={{ display: 'none' }}
           onChange={handleFiles}
         />
-        <button onClick={() => fileRef.current?.click()}>+ Додати фото</button>
+        <button onClick={() => fileRef.current?.click()}>+ {t.addImage}</button>
       </div>
     </div>
   );

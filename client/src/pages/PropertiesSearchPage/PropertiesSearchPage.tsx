@@ -10,8 +10,8 @@ import { useTranslations } from '../../store/translations';
 type FilterKey = 'location' | 'type' | 'purpose' | 'price';
 
 const purposeMapping: Record<string, string> = {
-  'Купівля': 'sale',
-  'Оренда': 'rent',
+  sale: 'sale',
+  rent: 'rent',
 };
 
 const PropertiesSearchPage: React.FC = () => {
@@ -22,41 +22,74 @@ const PropertiesSearchPage: React.FC = () => {
   const { translations } = useTranslations();
   const t = translations();
 
+  const locationOptions = [
+    { key: 'kyiv', label: t.locationKyiv },
+    { key: 'lviv', label: t.locationLviv },
+    { key: 'odesa', label: t.locationOdesa },
+    { key: 'kharkiv', label: t.locationKharkiv },
+  ];
+
+  const typeOptions = [
+    { key: 'apartment', label: t.typeApartment },
+    { key: 'house', label: t.typeHouse },
+    { key: 'commercial', label: t.typeCommercial },
+  ];
+
+  const purposeOptions = [
+    { key: 'sale', label: t.purposeSale },
+    { key: 'rent', label: t.purposeRent },
+  ];
+
+  const priceOptions = [
+    { key: 'low', label: t.priceLow },
+    { key: 'mid', label: t.priceMid },
+    { key: 'high', label: t.priceHigh },
+  ];
+
+  const filters: { label: string; key: FilterKey; options: { key: string; label: string }[] }[] = [
+    { label: t.filterLocation, key: 'location', options: locationOptions },
+    { label: t.filterType, key: 'type', options: typeOptions },
+    { label: t.filterPurpose, key: 'purpose', options: purposeOptions },
+    { label: t.filterPrice, key: 'price', options: priceOptions },
+  ];
+
   const toggleDropdown = (name: FilterKey) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
   };
 
-  const selectOption = (key: FilterKey, option: string) => {
-    setSelectedFilters((prev) => ({ ...prev, [key]: option }));
+  const displayValue = (key: FilterKey) => {
+    const selectedKey = selectedFilters[key];
+    if (!selectedKey) return '';
+    const filter = filters.find(f => f.key === key);
+    const option = filter?.options.find(o => o.key === selectedKey);
+    return option ? option.label : '';
+  };
+
+  const selectOption = (key: FilterKey, optionKey: string) => {
+    setSelectedFilters((prev) => ({ ...prev, [key]: optionKey }));
     setOpenDropdown(null);
   };
 
- const filters: { label: string; key: FilterKey; options: string[] }[] = [
-    { label: t.filterLocation, key: 'location', options: ['Київ', 'Львів', 'Одеса', 'Харків'] },
-    { label: t.filterType, key: 'type', options: ['Квартира', 'Будинок', 'Комерційна'] },
-    { label: t.filterPurpose, key: 'purpose', options: ['Купівля', 'Оренда'] },
-    { label: t.filterPrice, key: 'price', options: ['< $50,000', '$50,000–$100,000', '> $100,000'] },
-  ];
+  const getPriceRange = (priceKey?: string) => {
+    switch (priceKey) {
+      case 'low':
+        return { priceFrom: undefined, priceTo: 50000 };
+      case 'mid':
+        return { priceFrom: 50000, priceTo: 100000 };
+      case 'high':
+        return { priceFrom: 100000, priceTo: 10000000 };
+      default:
+        return { priceFrom: undefined, priceTo: undefined };
+    }
+  };
 
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const priceRange = selectedFilters.price;
-      let priceFrom, priceTo;
-
-      if (priceRange === '< $50,000') {
-        priceTo = 50000;
-      } else if (priceRange === '$50,000–$100,000') {
-        priceFrom = 50000;
-        priceTo = 100000;
-      } else if (priceRange === '> $100,000') {
-        priceFrom = 100000;
-        priceTo = 10000000;
-      }
-
+      const { priceFrom, priceTo } = getPriceRange(selectedFilters.price);
       const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
 
-       const res = await PropertyService.search({
+      const res = await PropertyService.search({
         city: selectedFilters.location,
         listingType,
         propertyType: selectedFilters.type,
@@ -68,52 +101,15 @@ const PropertiesSearchPage: React.FC = () => {
 
       setResult(res.data.data || []);
     } catch (e) {
-      alert('Помилка пошуку: ' + e);
+      alert(t.submitError + ': ' + e);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const priceRange = selectedFilters.price;
-        let priceFrom, priceTo;
-
-        if (priceRange === '< $50,000') {
-          priceTo = 50000;
-        } else if (priceRange === '$50,000–$100,000') {
-          priceFrom = 50000;
-          priceTo = 100000;
-        } else if (priceRange === '> $100,000') {
-          priceFrom = 100000;
-          priceTo = 10000000;
-        }
-
-        const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
-
-        const res = await PropertyService.search({
-        city: selectedFilters.location,
-        listingType,
-        propertyType: selectedFilters.type,
-        priceFrom,
-        priceTo,
-        page: 1,
-       limit: 100
-      });
-
-        setResult(res.data.data || []);
-      } catch (e) {
-        alert('Помилка пошуку: ' + e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    handleSearch();
   }, [selectedFilters]);
-
 
   return (
     <div className={styles.container}>
@@ -128,20 +124,20 @@ const PropertiesSearchPage: React.FC = () => {
               className={styles.filterItem}
               onClick={() => toggleDropdown(key)}
             >
-              <span>{selectedFilters[key] || label}</span>
+              <span>{displayValue(key) || label}</span>
               <span>▾</span>
               {openDropdown === key && (
                 <ul className={styles.dropdown}>
-                  {options.map((option) => (
+                  {options.map(({ key: optionKey, label }) => (
                     <li
-                      key={option}
+                      key={optionKey}
                       className={styles.dropdownItem}
                       onClick={(e) => {
                         e.stopPropagation();
-                        selectOption(key, option);
+                        selectOption(key, optionKey);
                       }}
                     >
-                      {option}
+                      {label}
                     </li>
                   ))}
                 </ul>

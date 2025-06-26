@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './PropertyCard.module.scss';
 import { RouteNames } from '../../app/router';
+import { useTranslations } from '../../store/translations';
 
 const backendUrl = 'http://localhost:5001/static/';
 
@@ -27,6 +28,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   listingType,
 }) => {
   const navigate = useNavigate();
+  const t = useTranslations().translations();
 
   const getImageSrc = (url: string) => {
     if (url.startsWith('http://') || url.startsWith('https://')) {
@@ -46,12 +48,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.price}>
           ${Number(price).toLocaleString()}
-          {listingType === 'rent' ? '/month' : ''}
+          {listingType === 'rent' ? ` / ${t.month || 'month'}` : ''}
         </p>
         <p className={styles.address}>{address}</p>
         <div className={styles.details}>
-          <span>🛏 {bedrooms} Beds</span>
-          <span>🛁 {bathrooms} Bathrooms</span>
+          <span>🛏 {bedrooms} {t.beds || 'Beds'}</span>
+          <span>🛁 {bathrooms} {t.baths || 'Bathrooms'}</span>
         </div>
       </div>
     </div>

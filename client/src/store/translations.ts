@@ -55,6 +55,69 @@ const translationsMap = {
     addImage: 'Add Image',
     submitSuccess: 'Thank you! Your application has been submitted. Our agent will contact you after verification.',
     submitError: 'Error occurred while creating the announcement',
+    beds: 'Beds',
+    baths: 'Bathrooms',
+    month: 'month',
+
+    locationKyiv: 'Kyiv',
+    locationLviv: 'Lviv',
+    locationOdesa: 'Odesa',
+    locationKharkiv: 'Kharkiv',
+
+    typeApartment: 'Apartment',
+    typeHouse: 'House',
+    typeCommercial: 'Commercial',
+
+    purposeSale: 'Buy',
+    purposeRent: 'Rent',
+
+    priceLow: '< $50,000',
+    priceMid: '$50,000–$100,000',
+    priceHigh: '> $100,000',
+
+    propertiesPageTitle: 'Real Estate',
+    propertiesAddButton: 'Add new listing',
+    propertiesLoading: 'Loading properties...',
+
+    price: 'Price',
+    from: 'From',
+    to: 'To',
+
+    apartment: 'Apartment',
+    house: 'House',
+    commercial: 'Commercial',
+
+    editAnnouncement: 'Edit Announcement',
+    save: 'Save',
+
+    publicationManagementTitle: 'Publication Management',
+    yearBuiltSuffix: 'built',
+    publish: 'Publish',
+    reject: 'Reject',
+    submittedApplicationsTitle: "Submitted Applications",
+    perMonth: "/month",
+    processed: "Processed",
+    applicationProcessedAlert: "Application processed successfully",
+    firstNameRequired: "First name is required",
+    lastNameRequired: "Last name is required",
+    emailRequired: "Email is required",
+    emailInvalid: "Please enter a valid email",
+    phoneRequired: "Phone number is required",
+    saveError: "Error saving data",
+    deleteError: "Error deleting user",
+    confirmDeleteUser: "Are you sure you want to delete this user?",
+    create: "Create",
+    editUser: "Edit User",
+    createUser: "Create User",
+    firstNamePlaceholder: "First Name",
+    lastNamePlaceholder: "Last Name",
+    emailPlaceholder: "Email",
+    phonePlaceholder: "Phone",
+
+    searchPlaceholder: "Type to search...",
+    buttosearchButtonTextnText: "Search",
+    
+    createEmployee: "Create employee"
   },
   uk: {
     announcement: 'Оголошення',
@@ -108,7 +171,72 @@ const translationsMap = {
     addImage: 'Додати зображення',
     submitSuccess: 'Дякуємо! Ваша заявка подана. Наш агент зв’яжеться з вами після перевірки.',
     submitError: 'Помилка під час створення оголошення',
-  }
+    beds: 'Спалень',
+    baths: 'Ванних кімнат',
+    month: 'місяць',
+
+    locationKyiv: 'Київ',
+    locationLviv: 'Львів',
+    locationOdesa: 'Одеса',
+    locationKharkiv: 'Харків',
+
+    typeApartment: 'Квартира',
+    typeHouse: 'Будинок',
+    typeCommercial: 'Комерційна',
+
+    purposeSale: 'Купівля',
+    purposeRent: 'Оренда',
+
+    priceLow: '< $50,000',
+    priceMid: '$50,000–$100,000',
+    priceHigh: '> $100,000',
+
+    propertiesPageTitle: 'Нерухомість',
+    propertiesAddButton: 'Додати оголошення',
+    propertiesLoading: 'Завантаження оголошень...',
+
+    price: 'Ціна',
+    from: 'Від',
+    to: 'До',
+
+    apartment: 'Квартира',
+    house: 'Будинок',
+    commercial: 'Комерційна',
+    
+    editAnnouncement: 'Редагувати оголошення',
+    save: 'Зберегти',
+
+    publicationManagementTitle: 'Управління публікаціями',
+    yearBuiltSuffix: 'р. побудови',
+    publish: 'Опублікувати',
+    reject: 'Відмовити',
+
+    submittedApplicationsTitle: "Подані заявки",
+    perMonth: "/місяць",
+    processed: "Оброблено",
+    applicationProcessedAlert: "Заявку успішно оброблено",
+
+    firstNameRequired: "Ім'я є обов'язковим полем",
+    lastNameRequired: "Прізвище є обов'язковим полем",
+    emailRequired: "Email є обов'язковим полем",
+    emailInvalid: "Введіть коректний email",
+    phoneRequired: "Номер телефону є обов'язковим полем",
+    saveError: "Помилка при збереженні",
+    deleteError: "Помилка при видаленні користувача",
+    confirmDeleteUser: "Ви впевнені, що хочете видалити цього користувача?",
+    create: "Створити",
+    editUser: "Редагувати користувача",
+    createUser: "Створити користувача",
+    firstNamePlaceholder: "Ім'я",
+    lastNamePlaceholder: "Прізвище",
+    emailPlaceholder: "Email",
+    phonePlaceholder: "Телефон",
+
+    searchPlaceholder: "Введіть для пошуку...",
+    searchButtonText: "Пошук",
+
+    createEmployee: "Створити співробітника"
+    }
 };
 
 

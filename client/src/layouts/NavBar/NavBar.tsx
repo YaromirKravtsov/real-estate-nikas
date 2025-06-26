@@ -11,7 +11,6 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 
-import { IconType } from "react-icons";
 import { useTranslations } from "../../store/translations";
 
 interface Props {
@@ -22,66 +21,56 @@ interface NavLink {
   link: string;
   activate: boolean;
   text: string;
-  icon: IconType;
+  icon: React.ElementType;
 }
+
 
 const NavBar: React.FC<Props> = ({ className }) => {
   const location = useLocation();
-  const {translations} = useTranslations()
-  console.log(translations)
-  const [navLinks, setNavLinks] = useState<NavLink[]>([
+  const { translations } = useTranslations();
+
+  const path = location.pathname;
+  const sectionFromUrl = "/" + path.split("/")[1];
+
+  const navLinks: NavLink[] = [
     {
       text: translations().announcement,
-      icon: FaBullhorn,
+      icon: FaBullhorn as React.ElementType,
       link: RouteNames.PROPERTIES,
       activate: false,
     },
     {
       text: translations().applications,
-      icon: FaCalendarAlt,
+      icon: FaCalendarAlt as React.ElementType,
       link: RouteNames.PUBLICATION,
       activate: false,
     },
     {
       text: translations().employees,
-      icon: FaUsers,
+      icon: FaUsers as React.ElementType,
       link: RouteNames.USERS,
       activate: false,
     },
     {
       text: translations().clientApplications,
-      icon: FaFileAlt,
+      icon: FaFileAlt as React.ElementType,
       link: RouteNames.APPLICATIONS,
       activate: false,
     },
-  ]);
-
-  const activateNavElement = (link: string) => {
-    setNavLinks(
-      navLinks.map((nav) => ({ ...nav, activate: nav.link === link }))
-    );
-  };
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    const sectionFromUrl = "/" + path.split("/")[1];
-    activateNavElement(sectionFromUrl);
-  }, [location]);
+  ].map((nav) => ({
+    ...nav,
+    activate: nav.link === sectionFromUrl,
+  }));
 
   return (
     <div className={`${className} ${styles.navBar}`}>
       {navLinks.map((navLink) => {
-        const Icon = navLink.icon as React.ComponentType<{
-          size?: number;
-          color?: string;
-        }>;
+        const Icon = navLink.icon;
         return (
           <Link
             key={navLink.link}
             to={navLink.link}
-            className={`${styles.navLink} ${
-              navLink.activate ? styles.active : ""
-            }`}
+            className={`${styles.navLink} ${navLink.activate ? styles.active : ""}`}
           >
             <Icon size={24} color="#000" />
             <p>{navLink.text}</p>
@@ -91,5 +80,6 @@ const NavBar: React.FC<Props> = ({ className }) => {
     </div>
   );
 };
+
 
 export default NavBar;
