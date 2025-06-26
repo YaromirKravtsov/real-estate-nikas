@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 
 import { IconType } from "react-icons";
+import { useTranslations } from "../../store/translations";
 
 interface Props {
   className: string;
@@ -26,34 +27,29 @@ interface NavLink {
 
 const NavBar: React.FC<Props> = ({ className }) => {
   const location = useLocation();
-
+  const {translations} = useTranslations()
+  console.log(translations)
   const [navLinks, setNavLinks] = useState<NavLink[]>([
     {
-      text: "Оголошення",
+      text: translations().announcement,
       icon: FaBullhorn,
       link: RouteNames.PROPERTIES,
       activate: false,
     },
-   /*  {
-      text: "AI-Чат Асистент",
-      icon: FaRobot,
-      link: RouteNames.ADMIN_MAIN,
-      activate: false,
-    }, */
     {
-      text: "Заявки",
+      text: translations().applications,
       icon: FaCalendarAlt,
       link: RouteNames.PUBLICATION,
       activate: false,
     },
     {
-      text: "Співробітники",
+      text: translations().employees,
       icon: FaUsers,
       link: RouteNames.USERS,
       activate: false,
     },
     {
-      text: "Заявки клієнтів",
+      text: translations().clientApplications,
       icon: FaFileAlt,
       link: RouteNames.APPLICATIONS,
       activate: false,
