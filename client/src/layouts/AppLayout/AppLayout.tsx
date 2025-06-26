@@ -11,15 +11,11 @@ interface Props {
   children: ReactNode
 }
 const AppLayout: FC<Props> = ({ children }) => {
-  const { role } = useAuthStore()
-  const { pathname } = useLocation();
-
   // показуємо AdminHeader, якщо роль – admin або поточний шлях – в переліку adminRoutes
   const showAdminHeader = useIsAdminPage()
 
   return (
     <div className={`${styles.page} ${showAdminHeader && styles.admin}`}>
-   
       {showAdminHeader ?<AdminHeader /> : <Header/>}
       <div className={styles.pageRow}>
         {showAdminHeader && <NavBar className={styles.navBar} />}

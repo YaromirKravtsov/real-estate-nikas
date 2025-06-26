@@ -104,3 +104,8 @@ input:focus {
     font-size: 14px !important;
     line-height: 23px;
 }
+
+
+.mainPage .userHeader{
+    position: absolute;
+}

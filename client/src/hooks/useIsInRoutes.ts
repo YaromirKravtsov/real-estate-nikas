@@ -8,6 +8,7 @@ export function useIsAdminPage() {
   const { role } = useAuthStore();
 
   // якщо передано allowRole — дозволяємо лише цьому role
+  console.log(role)
   if (role !== 'admin') {
     return false;
   }

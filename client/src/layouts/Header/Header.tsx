@@ -12,27 +12,27 @@ const Header: React.FC<HeaderProps> = ({ textColor = "#000" }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate("/search");
+    navigate(RouteNames.NEW);
   };
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} userHeader`}>
       <Link to = '/' className={styles.logo} style={{ color: textColor }}>
         Nikas
       </Link>
 
       <nav className={styles.nav}>
          <Link
-            to={RouteNames.NEW}
+            to={RouteNames.SEARCH}
             className={styles.navItem}
             style={{ color: textColor, background: 'none', border: 'none', cursor: 'pointer' }}
           >
-            Подати оголошення
+            Шукати нерухомість
           </Link>
       </nav>
 
       <button className={styles.button} onClick={handleNavigate}>
-        Переглянути оголошення
+        Подати оголошення
         <span style={{ fontSize: '1.125rem' }}>→</span>
       </button>
     </header>

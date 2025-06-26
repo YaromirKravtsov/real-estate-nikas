@@ -7,6 +7,7 @@ import heroImage from '../../assets/images/hero-house.jpeg';
 import trustImage from '../../assets/images/people-meeting.jpg';
 
 import PropertyService from '../../app/api/service/PropertyService';
+import { useLocation } from 'react-router-dom';
 
 type FilterKey = 'location' | 'type' | 'purpose' | 'price';
 
@@ -20,15 +21,10 @@ const MainPage: React.FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<Partial<Record<FilterKey, string>>>({});
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
-  const toggleDropdown = (name: FilterKey) => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
-  };
 
-  const selectOption = (key: FilterKey, option: string) => {
-    setSelectedFilters((prev) => ({ ...prev, [key]: option }));
-    setOpenDropdown(null);
-  };
+
 
   const filters: { label: string; key: FilterKey; options: string[] }[] = [
     { label: 'Місце розташування', key: 'location', options: ['Київ', 'Львів', 'Одеса', 'Харків'] },
@@ -37,42 +33,14 @@ const MainPage: React.FC = () => {
     { label: 'Ціна', key: 'price', options: ['< $50,000', '$50,000–$100,000', '> $100,000'] },
   ];
 
-  const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const priceRange = selectedFilters.price;
-      let priceFrom, priceTo;
+  
+  useEffect(()=>{
+    if(location.pathname == '/'){
+      document.body.classList.add('mainPage')
 
-      if (priceRange === '< $50,000') {
-        priceTo = 50000;
-      } else if (priceRange === '$50,000–$100,000') {
-        priceFrom = 50000;
-        priceTo = 100000;
-      } else if (priceRange === '> $100,000') {
-        priceFrom = 100000;
-        priceTo = 10000000;
-      }
-
-      const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
-
-       const res = await PropertyService.search({
-        city: selectedFilters.location,
-        listingType,
-        propertyType: selectedFilters.type,
-        priceFrom,
-        priceTo,
-        page: 1,
-        limit:100,
-      });
-
-      setResult(res.data.data || []);
-    } catch (e) {
-      alert('Помилка пошуку: ' + e);
-    } finally {
-      setLoading(false);
+    return () => document.body.classList.remove('mainPage')
     }
-  };
-
+  },[location.pathname])
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -93,14 +61,14 @@ const MainPage: React.FC = () => {
         const listingType = selectedFilters.purpose ? purposeMapping[selectedFilters.purpose] : undefined;
 
         const res = await PropertyService.search({
-        city: selectedFilters.location,
-        listingType,
-        propertyType: selectedFilters.type,
-        priceFrom,
-        priceTo,
-        page: 1,
-        limit: 100,
-      });
+          city: selectedFilters.location,
+          listingType,
+          propertyType: selectedFilters.type,
+          priceFrom,
+          priceTo,
+          page: 1,
+          limit: 100,
+        });
 
         setResult(res.data.data || []);
       } catch (e) {
@@ -138,7 +106,7 @@ const MainPage: React.FC = () => {
           <div className={styles.sectionLine}></div>
           <h2 className={styles.trustTitle}>Ви в надійних руках</h2>
           <p className={styles.trustDescription}>
-              Наш підхід — це більше, ніж просто слова. Ми дбаємо про кожен аспект, щоб захистити вас від ризиків і забезпечити максимальний комфорт. Як досвідчені провідники у світі нерухомості, ми відкриваємо те, що раніше залишалося прихованим — від реальної цінності до справжнього задоволення.
+            Наш підхід — це більше, ніж просто слова. Ми дбаємо про кожен аспект, щоб захистити вас від ризиків і забезпечити максимальний комфорт. Як досвідчені провідники у світі нерухомості, ми відкриваємо те, що раніше залишалося прихованим — від реальної цінності до справжнього задоволення.
           </p>
           <button className={styles.learnMoreButton}>Learn more</button>
         </div>
@@ -148,7 +116,7 @@ const MainPage: React.FC = () => {
       <section className={styles.listingsSection}>
         <div className={styles.sectionLine}></div>
         <h2 className={styles.listingsTitle}>Знайдіть своє нове місце для життя</h2>
-        
+
         {/* 
         <div className={styles.filters}>
           {filters.map(({ label, key, options }) => (

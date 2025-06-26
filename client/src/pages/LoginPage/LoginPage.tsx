@@ -17,7 +17,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (role == "admin" || role == "user") {
-      navigate(RouteNames.MAIN);
+      navigate(RouteNames.PROPERTIES);
     }
   }, [role]);
 
@@ -29,7 +29,7 @@ const LoginPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.main}>
-        <img src={"loginLogo"} alt="login Logo" />
+        
         <div className={styles.inputRow}>
           <div className={styles.title}>Пошта</div>
           <MyInput

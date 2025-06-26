@@ -9,8 +9,9 @@ import styles from './NewAnnouncementPage.module.css'
 import MyInput from "../../UI/MyInput/MyInput";
 import MySelect from "../../UI/MySelect/MySelect";
 import MyEditor from "../../UI/MyEditor/MyEditor";
-import { ListingType, PropertyRequestsService,  SubmitPropertyDto } from "../../app/api/service/PropertyRequestsService";
+import { ListingType, PropertyRequestsService, SubmitPropertyDto } from "../../app/api/service/PropertyRequestsService";
 import { buildFormData } from "./helpers/buildFormData";
+import InputRow from "../../UI/InputRow/InputRow";
 function parseJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];
@@ -103,7 +104,7 @@ const NewAnnouncementPage = () => {
   useEffect(() => {
     scrollToIndex(selectedImageIndex);
   }, [selectedImageIndex]);
-  
+
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -127,95 +128,117 @@ const NewAnnouncementPage = () => {
   };
 
   return (
-    <PageLayout actionTitle="Опублікувати" pageTitle="Додати оголошення" action={handleSubmit}>
+    <PageLayout actionTitle="Додати оголошення" pageTitle="Додати оголошення" action={handleSubmit}>
       <div className={styles.formContainer}>
         <div className={styles.fields}>
-           <MyInput
-            name="name"
-            value={formData.name}
-            setValue={val => setFormData({ ...formData, name: val })}
-            placeholder="Імя"
-          />
-           <MyInput
-            name="email"
-            value={formData.email}
-            setValue={val => setFormData({ ...formData, email: val })}
-            placeholder="Email"
-          />
-           
+          <InputRow title="Імя">
+            <MyInput
+              name="name"
+              value={formData.name}
+              setValue={val => setFormData({ ...formData, name: val })}
+              placeholder="Імя"
+            />
+          </InputRow>
 
+          <InputRow title="Email">
+            <MyInput
+              name="email"
+              value={formData.email}
+              setValue={val => setFormData({ ...formData, email: val })}
+              placeholder="Email"
+            />
+          </InputRow>
 
-          <MyInput
-            name="title"
-            value={formData.title}
-            setValue={val => setFormData({ ...formData, title: val })}
-            placeholder="Назва"
-          />
+          <InputRow title="Назва">
+            <MyInput
+              name="title"
+              value={formData.title}
+              setValue={val => setFormData({ ...formData, title: val })}
+              placeholder="Назва"
+            />
+          </InputRow>
 
-          <MyInput
-            name="price"
-            type="number"
-            value={String(formData.price)}
-            setValue={val => setFormData({ ...formData, price: Number(val) })}
-            placeholder="Ціна у €"
-          />
+          <InputRow title="Ціна у €">
+            <MyInput
+              name="price"
+              type="number"
+              value={String(formData.price)}
+              setValue={val => setFormData({ ...formData, price: Number(val) })}
+              placeholder="Ціна у €"
+            />
+          </InputRow>
 
-          <MyInput
-            name="address"
-            value={formData.address}
-            setValue={val => setFormData({ ...formData, address: val })}
-            placeholder="Адреса"
-          />
+          <InputRow title="Адреса">
+            <MyInput
+              name="address"
+              value={formData.address}
+              setValue={val => setFormData({ ...formData, address: val })}
+              placeholder="Адреса"
+            />
+          </InputRow>
 
-          <MyInput
-            name="city"
-            value={formData.city}
-            setValue={val => setFormData({ ...formData, city: val })}
-            placeholder="Місто"
-          />
+          <InputRow title="Місто">
+            <MyInput
+              name="city"
+              value={formData.city}
+              setValue={val => setFormData({ ...formData, city: val })}
+              placeholder="Місто"
+            />
+          </InputRow>
 
-         <MySelect
-            options={[
-              { value: 'sale', label: 'Продаж' },
-              { value: 'rent', label: 'Оренда' }
-            ]}
-            value={formData.listingType}
-            onChange={val => setFormData({ ...formData, listingType: val as ListingType })}
-            placeholder="Тип оголошення"
-            className={styles.input}
-          />
+          <InputRow title="Тип оголошення">
+            <MySelect
+              options={[
+                { value: 'sale', label: 'Продаж' },
+                { value: 'rent', label: 'Оренда' }
+              ]}
+              value={formData.listingType}
+              onChange={val => setFormData({ ...formData, listingType: val as ListingType })}
+              placeholder="Тип оголошення"
+              className={styles.input}
+            />
+          </InputRow>
 
-          <MyInput
-            name="propertyType"
-            value={formData.propertyType}
-            setValue={val => setFormData({ ...formData, propertyType: val })}
-            placeholder="Тип нерухомості"
-          />
+          <InputRow title="Тип нерухомості">
+            <MyInput
+              name="propertyType"
+              value={formData.propertyType}
+              setValue={val => setFormData({ ...formData, propertyType: val })}
+              placeholder="Тип нерухомості"
+            />
+          </InputRow>
 
-          <MyInput
-            name="bedrooms"
-            type="number"
-            value={String(formData.bedrooms)}
-            setValue={val => setFormData({ ...formData, bedrooms: Number(val) })}
-            placeholder="Кількість спалень"
-          />
+          <InputRow title="Кількість спалень">
+            <MyInput
+              name="bedrooms"
+              type="number"
+              value={String(formData.bedrooms)}
+              setValue={val => setFormData({ ...formData, bedrooms: Number(val) })}
+              placeholder="Кількість спалень"
+            />
+          </InputRow>
 
-          <MyInput
-            name="bathrooms"
-            type="number"
-            value={String(formData.bathrooms)}
-            setValue={val => setFormData({ ...formData, bathrooms: Number(val) })}
-            placeholder="Кількість ванних кімнат"
-          />
+          <InputRow title="Кількість ванних кімнат">
+            <MyInput
+              name="bathrooms"
+              type="number"
+              value={String(formData.bathrooms)}
+              setValue={val => setFormData({ ...formData, bathrooms: Number(val) })}
+              placeholder="Кількість ванних кімнат"
+            />
+          </InputRow>
 
-          <MyInput
-            name="yearBuilt"
-            type="number"
-            value={String(formData.yearBuilt)}
-            setValue={val => setFormData({ ...formData, yearBuilt: Number(val) })}
-            placeholder="Рік побудови"
-          />
+          <InputRow title="Рік побудови">
+            <MyInput
+              name="yearBuilt"
+              type="number"
+              value={String(formData.yearBuilt)}
+              setValue={val => setFormData({ ...formData, yearBuilt: Number(val) })}
+              placeholder="Рік побудови"
+            />
+          </InputRow>
         </div>
+
 
         <div className={styles.imagePanel}>
           {images.length > 0 && (
@@ -235,8 +258,7 @@ const NewAnnouncementPage = () => {
                   key={idx}
                   src={URL.createObjectURL(file)}
                   alt={`preview-${idx}`}
-                  className={`${styles.thumbnail} ${
-                    selectedImageIndex === idx ? styles.selected : ''}
+                  className={`${styles.thumbnail} ${selectedImageIndex === idx ? styles.selected : ''}
                   `}
                   onClick={() => setSelectedImageIndex(idx)}
                 />
@@ -268,7 +290,7 @@ const NewAnnouncementPage = () => {
         <MyEditor
           className={styles.descriptionTextarea}
           value={formData.description}
-setValue={val => setFormData(prev => ({...prev, description: val}))}
+          setValue={val => setFormData(prev => ({ ...prev, description: val }))}
         />
       </div>
     </PageLayout>

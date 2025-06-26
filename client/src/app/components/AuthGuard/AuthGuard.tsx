@@ -41,23 +41,9 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
         return <Loader />;
     }
     
-    if (!isLoading && isAuth && (role === 'admin' || role === 'user')) {
-        return <>{props.children}</>;
-    }
+   
 
-    return (
-        <Routes>
-            {publicRoutes.map((route) => (
-                <Route
-                    key={route.path}
-                    path={route.path}
-                    element={<Suspense fallback={<Loader />}><route.element /></Suspense>}
-                />
-            ))}
-
-            <Route path="*" element={<Navigate to={RouteNames.LOGIN} replace />} />
-        </Routes>
-    );
+    return <>{props.children}</>;
 };
 
 export default AuthGuard;
