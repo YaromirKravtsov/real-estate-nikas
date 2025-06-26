@@ -12,21 +12,27 @@ interface Props {
   children: ReactNode
 }
 const AppLayout: FC<Props> = ({ children }) => {
-  // показуємо AdminHeader, якщо роль – admin або поточний шлях – в переліку adminRoutes
-  const showAdminHeader = useIsAdminPage()
+  const location = useLocation();
+
+  const showAdminHeader = useIsAdminPage();
+
+  const isHomePage = location.pathname === '/';
 
   return (
     <div className={`${styles.page} ${showAdminHeader && styles.admin}`}>
-      {showAdminHeader ?<AdminHeader /> : <Header/>}
+      {showAdminHeader
+        ? <AdminHeader />
+        : <Header textColor={isHomePage ? '#fff' : undefined} />
+      }
       <div className={styles.pageRow}>
         {showAdminHeader && <NavBar className={styles.navBar} />}
         <div className={styles.main}>
           {children}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default AppLayout
