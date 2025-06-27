@@ -11,6 +11,7 @@ import ImageGalleryEditor from './ImageGalleryEditor';
 import InputRow from '../../UI/InputRow/InputRow';
 import { RouteNames } from '../../app/router';
 import { useTranslations } from '../../store/translations';
+import { SelectOption } from '../../models/SelectOption';
 
 type IAction = 'create' | 'edit';
 
@@ -97,7 +98,19 @@ const PropertyPage: FC = () => {
   if (loading && action === 'edit' && form.title === '') {
     return <p>{t.loading}</p>;
   }
+  type locationType = 'kyiv' | 'lviv' | 'odesa' | 'kharkiv'
+  const locationOptions: SelectOption[] = [
+    { value: 'kyiv', label: t.locationKyiv },
+    { value: 'lviv', label: t.locationLviv },
+    { value: 'odesa', label: t.locationOdesa },
+    { value: 'kharkiv', label: t.locationKharkiv },
+  ];
 
+  const typeOptions = [
+    { value: 'apartment', label: t.typeApartment },
+    { value: 'house', label: t.typeHouse },
+    { value: 'commercial', label: t.typeCommercial },
+  ];
   return (
     <PageLayout
       pageTitle={action === 'create' ? t.addAnnouncement : t.editAnnouncement}
@@ -109,7 +122,7 @@ const PropertyPage: FC = () => {
           <MyInput
             placeholder={t.title}
             value={form.title || ''}
-            setValue={v => setForm(f => ({ ...f, title: v }))}
+            setValue={v => setForm(f => ({ ...f, title: v as locationType }))}
           />
         </InputRow>
 
@@ -131,12 +144,14 @@ const PropertyPage: FC = () => {
         </InputRow>
 
         <InputRow title={t.city}>
-          <MyInput
-            placeholder={t.city}
+          <MySelect
+            options={locationOptions}
             value={form.city}
-            setValue={v => setForm(f => ({ ...f, city: v }))}
+            onChange={v => setForm(f => ({ ...f, city: v }))}
           />
         </InputRow>
+
+
 
         <InputRow title={t.listingType}>
           <MySelect
@@ -148,13 +163,14 @@ const PropertyPage: FC = () => {
             value={form.listingType}
             onChange={v => setForm(f => ({ ...f, listingType: v as 'sale' | 'rent' }))}
           />
+          
         </InputRow>
 
         <InputRow title={t.propertyType}>
-          <MyInput
-            placeholder={t.propertyType}
-            value={form.propertyType}
-            setValue={v => setForm(f => ({ ...f, propertyType: v }))}
+           <MySelect
+            options={typeOptions}
+            value={form.city}
+            onChange={v => setForm(f => ({ ...f, propertyType: v }))}
           />
         </InputRow>
 

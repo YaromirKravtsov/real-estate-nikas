@@ -44,7 +44,7 @@ const Footer: React.FC<FooterProps> = ({ textColor = "#000" }) => {
       </button>
 
       <div className={styles.languageSelector}>
-        <p style={{ color: textColor }}>{t.changeLanguage}</p>
+
         <div className={styles.languageButtons}>
           <button
             onClick={() => handleLanguageChange("uk")}

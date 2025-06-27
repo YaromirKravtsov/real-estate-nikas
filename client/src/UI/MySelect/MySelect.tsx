@@ -9,7 +9,7 @@ interface MySelectProps {
     className?: string;
     onChange: (value: string) => void;
     disabled?: boolean;
-    value?: string; 
+    value?: string;
     hasError?: boolean;
 }
 
@@ -21,13 +21,13 @@ const MySelect: FC<MySelectProps> = (props) => {
 
     useEffect(() => {
         if (props.value !== undefined) {
-            setSelectedValue(props.value); 
+            setSelectedValue(props.value);
         }
     }, [props.value]);
 
     const handleOptionClick = (value: string, event: React.MouseEvent) => {
         event.stopPropagation(); // Предотвращаем всплытие
-        event.preventDefault(); 
+        event.preventDefault();
         setSelectedValue(value);
         props.onChange(value); // Уведомляем родителя о выборе
         setIsOpen(false);
@@ -40,7 +40,7 @@ const MySelect: FC<MySelectProps> = (props) => {
 
     const toggleDropdown = (event: React.MouseEvent) => {
         event.stopPropagation(); // Предотвращаем всплытие
-        event.preventDefault(); 
+        event.preventDefault();
         if (!props.disabled) {
             setIsOpen((prevState) => !prevState);
         }
@@ -66,9 +66,8 @@ const MySelect: FC<MySelectProps> = (props) => {
 
     return (
         <div
-            className={`${props.className || ""} ${styles.customSelectContainer} ${
-                props.disabled ? styles.disabled : ""
-            } `}
+            className={`${props.className || ""} ${styles.customSelectContainer} ${props.disabled ? styles.disabled : ""
+                } `}
             ref={selectRef}
             onClick={(event) => event.stopPropagation()} // Останавливаем всплытие на основном контейнере
         >
@@ -82,11 +81,9 @@ const MySelect: FC<MySelectProps> = (props) => {
                         ? props.options.find((option) => option.value === selectedValue)?.label
                         : props.placeholder}
                 </span>
-                <img
-                    src={''}
-                    alt="arrow select"
-                    className={`${styles.arrow} ${isOpen ? styles.open : ""}`}
-                />
+                <svg className={`${styles.arrow} ${isOpen ? styles.open : ""}`} width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.0773 1H2.0052C1.1802 1 0.710076 1.94269 1.20644 2.60166L7.45807 10.9012C7.86668 11.4437 8.68561 11.4298 9.07556 10.8737L14.896 2.57418C15.3608 1.91148 14.8867 1 14.0773 1Z" fill="black" stroke="black" />
+                </svg>
             </div>
             {isOpen && !props.disabled && (
                 <div className={styles.customSelectDropdown}>
@@ -94,9 +91,8 @@ const MySelect: FC<MySelectProps> = (props) => {
                         <div
                             key={option.value}
                             ref={option.value === selectedValue ? selectedOptionRef : null}
-                            className={`${styles.customSelectOption} ${
-                                option.value === selectedValue ? styles.selectedOption : ""
-                            }`}
+                            className={`${styles.customSelectOption} ${option.value === selectedValue ? styles.selectedOption : ""
+                                }`}
                             onClick={(event) => handleOptionClick(option.value, event)}
                         >
                             {option.label}

@@ -25,7 +25,7 @@ export class PropertyRequestService {
     const { name, phone, message, email, ...createPropertyDto } = dto;
     console.log(createPropertyDto)
     const property = await this.propertyService.create({
-      ...createPropertyDto, is_submission: true
+      ...createPropertyDto, is_submission: true, agentId: 1
     }, images)
 
     return await this.model.create({ name, phone, message, email, propertyId: property.id, requestType: 2 });
